@@ -13,16 +13,6 @@ function App() {
                 <Route path="/search" element={<Search/>}/>
                 <Route path="/login" element={<Login/>}/>
             </Routes>
-            {/*<div className="container justify-content-end">*/}
-            {/*    <button className="btn-main m-4">Button</button>*/}
-            {/*    <button className="btn-main m-4" disabled>Button</button>*/}
-            {/*    <button className="btn-text">Button</button>*/}
-            {/*    <input className="text-input"/>*/}
-            {/*    <p className="tinted">Tinted text</p>*/}
-            {/*    <Container className="card">*/}
-            {/*      <p>Just text</p>*/}
-            {/*    </Container>*/}
-            {/*</div>*/}
         </BrowserRouter>
     );
 }
