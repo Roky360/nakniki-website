@@ -1,5 +1,6 @@
 import './App.css';
 import {Container, Button, Navbar,  } from 'react-bootstrap';
+import AvatarCircle from "./components/AvatarCircle"
 
 function App() {
   return (
@@ -29,8 +30,10 @@ function App() {
           <Container className="card">
               <p>Hi inside card</p>
           </Container>
+          <AvatarCircle src={window.location.origin + "/avatars/avatar4.png"}/>
       </div>
   );
 }
+
 
 export default App;
