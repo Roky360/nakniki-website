@@ -1,36 +1,30 @@
-:root {
-    /* Colors */
-    --primary-color: #790b0b;
-    --primary-tinted: #6e0909;
-    --primary-outline: #540404;
-    --secondary-color: #8c710c;
-    --text-color: #ffffff;
-    --text-shade-color: #d3d1d1;
-    --text-tinted-color: #807c7c;
-    --bg-color: #212529;
-    --shadow-color: #832d2d;
-    --disabled-color: #623737;
-    --card-shadow: rgba(48, 50, 56, 0.8);
+/* Google icons */
+.material-icons {
+    font-family: 'Material Icons', serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;  /* Preferred icon size */
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+    cursor: default;
+    color: var(--text-shade-color);
+    border-radius: 50px;
 
-    --form-bg: rgba(54, 57, 59, 0.62);
-    --form-outline: #2a2c36;
-    --form-outline-focused: #363949;
+    /* Support for all WebKit browsers. */
+    -webkit-font-smoothing: antialiased;
+    /* Support for Safari and Chrome. */
+    text-rendering: optimizeLegibility;
 
-    --link-color: #2874af;
-    --link-hover-color: #2b81c4;
-    /* Sizes */
-    --main-btn-size: 16pt;
-    --btn-padding-horizontal: 12pt;
-    --btn-padding-vertical: 6pt;
+    /* Support for Firefox. */
+    -moz-osx-font-smoothing: grayscale;
 
-    --card-padding-horizontal: 24pt;
-    --card-padding-vertical: 20pt;
-    --card-border-radius: 16pt;
-
-    --title-1-size: 26pt;
-    --title-2-size: 22pt;
-    --subtitle-size: 18pt;
-    --paragraph-size: 16pt;
+    /* Support for IE. */
+    font-feature-settings: 'liga';
 }
 
 body {
@@ -49,6 +43,10 @@ p {
 
 .center {
     text-align: center;
+}
+
+.pressable {
+    cursor: pointer;
 }
 
 /* Main Button */
@@ -94,17 +92,24 @@ p {
     background-color: rgba(0, 0, 0, 0) !important;
 }
 
+/* Appbar */
+.appbar {
+    padding: var(--page-padding-v) var(--page-padding-h) var(--page-padding-v) var(--page-padding-h);
+    background: linear-gradient(180deg, var(--appbar-bg) 40%, #362C2CFF 20%, var(--bg-color) 90%);
+}
+
 /* Navigator Tab */
 .nav-tab {
     color: var(--text-color);
     font-weight: bold;
-    font-size: 18pt;
+    font-size: var(--nav-tab-size);
+    margin-left: var(--appbar-tab-margin);
+    margin-right: var(--appbar-tab-margin);
 }
 
 .nav-tab:hover {
     color: var(--text-shade-color);
     font-weight: bold;
-    font-size: 18pt;
     cursor: pointer;
 }
 
@@ -112,15 +117,16 @@ p {
 .nav-tab-active {
     color: var(--primary-color);
     font-weight: bold;
-    font-size: 18pt;
+    font-size: var(--nav-tab-size);
     text-decoration: underline;
     text-underline-offset: 5pt;
+    margin-left: var(--appbar-tab-margin);
+    margin-right: var(--appbar-tab-margin);
 }
 
 .nav-tab-active:hover {
     color: var(--primary-tinted);
     font-weight: bold;
-    font-size: 18pt;
     cursor: pointer;
 }
 
