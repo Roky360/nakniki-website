@@ -1,0 +1,196 @@
+:root {
+    /* Colors */
+    --primary-color: #790b0b;
+    --primary-tinted: #6e0909;
+    --primary-outline: #540404;
+    --secondary-color: #8c710c;
+    --text-color: #ffffff;
+    --text-shade-color: #d3d1d1;
+    --text-tinted-color: #807c7c;
+    --bg-color: #212529;
+    --shadow-color: #832d2d;
+    --disabled-color: #623737;
+    --card-shadow: rgba(48, 50, 56, 0.8);
+
+    --form-bg: rgba(54, 57, 59, 0.62);
+    --form-outline: #2a2c36;
+    --form-outline-focused: #363949;
+
+    --link-color: #2874af;
+    --link-hover-color: #2b81c4;
+    /* Sizes */
+    --main-btn-size: 16pt;
+    --btn-padding-horizontal: 12pt;
+    --btn-padding-vertical: 6pt;
+
+    --card-padding-horizontal: 24pt;
+    --card-padding-vertical: 20pt;
+    --card-border-radius: 16pt;
+
+    --title-1-size: 26pt;
+    --title-2-size: 22pt;
+    --subtitle-size: 18pt;
+    --paragraph-size: 16pt;
+}
+
+body {
+    background-color: var(--bg-color);
+}
+
+p {
+    color: var(--text-color);
+    font-size: var(--paragraph-size);
+}
+
+/* Modifiers */
+.tinted {
+    color: var(--text-tinted-color);
+}
+
+.center {
+    text-align: center;
+}
+
+/* Main Button */
+.btn-main {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: bold;
+    font-size: var(--main-btn-size);
+    border-radius: 10pt;
+    border: none;
+    padding: var(--btn-padding-vertical) var(--btn-padding-horizontal) var(--btn-padding-vertical) var(--btn-padding-horizontal);
+    box-shadow: 0.1pt 1pt 5pt 0.1pt var(--shadow-color), 0 5pt 14pt 0 var(--shadow-color);
+}
+
+.btn-main:hover {
+    background-color: var(--primary-tinted);
+    box-shadow: 0.2pt 4pt 10pt 0.2pt var(--shadow-color), 0 7pt 16pt 0 var(--shadow-color);
+}
+
+.btn-main:active {
+    background-color: var(--primary-outline) !important;
+}
+
+.btn-main:disabled {
+    background-color: var(--disabled-color) !important;
+    box-shadow: 0.1pt 1pt 5pt 0.1pt var(--disabled-color), 0 5pt 14pt 0 var(--disabled-color);
+}
+
+/* Text Button */
+.btn-text {
+    color: var(--text-color);
+    background-color: rgba(0, 0, 0, 0);
+    font-weight: bold;
+    border: none;
+}
+
+.btn-text:hover {
+    background-color: rgba(0, 0, 0, 0);
+    color: var(--text-shade-color);
+}
+
+.btn-text:active {
+    background-color: rgba(0, 0, 0, 0) !important;
+}
+
+/* Navigator Tab */
+.nav-tab {
+    color: var(--text-color);
+    font-weight: bold;
+    font-size: 18pt;
+}
+
+.nav-tab:hover {
+    color: var(--text-shade-color);
+    font-weight: bold;
+    font-size: 18pt;
+    cursor: pointer;
+}
+
+/* Nav tab active */
+.nav-tab-active {
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 18pt;
+    text-decoration: underline;
+    text-underline-offset: 5pt;
+}
+
+.nav-tab-active:hover {
+    color: var(--primary-tinted);
+    font-weight: bold;
+    font-size: 18pt;
+    cursor: pointer;
+}
+
+/* Text input */
+.text-input {
+    color: var(--text-shade-color);
+    background-color: var(--form-bg);
+    border: solid 1pt var(--form-outline);
+    border-radius: 7pt;
+    padding: var(--btn-padding-vertical) var(--btn-padding-horizontal) var(--btn-padding-vertical) var(--btn-padding-horizontal);
+}
+
+.text-input:focus {
+    color: var(--text-shade-color);
+    background-color: var(--form-bg);
+    border: solid 1pt var(--form-outline-focused);
+    border-radius: 7pt;
+}
+
+/* Link */
+.link {
+    color: var(--link-color);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.link:hover {
+    color: var(--link-hover-color);
+}
+
+/* Checkbox */
+.checkbox {
+    background-color: var(--text-shade-color);
+    border: 1pt var(--form-outline) solid;
+    padding: 8pt;
+}
+
+.checkbox:checked {
+    background-color: var(--primary-color);
+    border: 1pt var(--primary-tinted) solid;
+}
+
+
+/* title-1 */
+.title-1 {
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: var(--title-1-size);
+}
+
+.title-2 {
+    font-weight: bold;
+    font-size: var(--title-2-size);
+}
+
+.subtitle {
+    color: var(--secondary-color);
+    font-weight: bold;
+    font-size: var(--subtitle-size);
+}
+
+.paragraph {
+    font-size: var(--paragraph-size);
+}
+
+/* Card */
+.card {
+    background-color: var(--form-bg);
+    padding: var(--card-padding-vertical) var(--card-padding-horizontal) var(--card-padding-vertical) var(--card-padding-horizontal);
+    border: 3pt solid var(--form-outline);
+    border-radius: var(--card-border-radius);
+    /*box-shadow: 2pt 4pt 6pt 2pt var(--card-shadow), 0 5pt 20pt 0 var(--card-shadow);*/
+}
