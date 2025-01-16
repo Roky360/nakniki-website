@@ -2,6 +2,7 @@ import './App.css';
 import {Container, Button, Navbar,  } from 'react-bootstrap';
 import AvatarCircle from "./components/AvatarCircle"
 import MovieCard from "./components/MovieCard"
+import Alert from "./components/Alert"
 
 
 function App() {
@@ -35,9 +36,11 @@ function App() {
           <AvatarCircle src={window.location.origin + "/avatars/avatar4.png"}/>
           <MovieCard moviePic={window.location.origin + "/avatars/avatar4.png"} movieName={"Eden the GOAT"}/>
           <MovieCard movieName={"Avi the GOAT"} editFunc={() => {}} deleteFunc={() => {}}/>
+          <Alert message={"hello"} type={"info"}/>
       </div>
   );
 }
 
 
 export default App;
+
