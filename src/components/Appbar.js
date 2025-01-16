@@ -2,6 +2,7 @@ import React from 'react';
 import {Navbar} from "react-bootstrap";
 import Icon from './Icon';
 import ThemeSwitcherButton from "./ThemeSwitcherButton";
+import {Link} from "react-router-dom";
 
 class Appbar extends React.Component {
     constructor(props) {
@@ -27,26 +28,50 @@ class Appbar extends React.Component {
             <Navbar className="appbar">
                 {/* TODO: logo here */}
                 { // tabs
-                    this.tabs.map((tab, i) =>
-                        <p className={"nav-tab" + (this.state.activeTab === i ? "-active" : "")}>{tab}</p>
+                    this.tabs.map((tab, i) => (
+                            <Link
+                                to={`/${tab === "Home" ? "" : tab.toLowerCase()}`}
+                                key={i}
+                                onClick={() => this.onTabChange(i)}
+                                style={{textDecoration: 'none'}}
+                            >
+                                <p className={"nav-tab" + (this.state.activeTab === i ? "-active" : "")}>{tab}</p>
+                            </Link>
+                        )
                     )
                 }
                 {/* Left side */}
                 <div className="container justify-content-end">
                     {/* Search button */}
-                    {this.state.isSignedIn ? <Icon className="pressable" icon="search" padding="12pt"/> : null}
+                    {this.state.isSignedIn
+                        ? <Link
+                            to={'/search'}
+                            onClick={() => this.onTabChange(-1)}
+                            style={{textDecoration: 'none'}}
+                        >
+                            <Icon className="pressable" icon="search" padding="12pt"/>
+                        </Link>
+                        : null}
                     {/* Theme switcher */}
                     {this.state.isSignedIn ? <ThemeSwitcherButton/> : null}
                     {/*TODO: profile pic here*/}
                     {/*<p>PROFILE</p>*/}
-                    {!this.state.isSignedIn ? <button className="btn-text">Login</button> : null}
+                    {!this.state.isSignedIn
+                        ? <Link
+                            to={'/login'}
+                            onClick={() => this.onTabChange(-1)}
+                            style={{textDecoration: 'none'}}
+                        >
+                            <button className="btn-text">Login</button>
+                        </Link>
+                        : null}
                 </div>
             </Navbar>
         );
     }
 
-    switchTheme() {
-        this.setState(prevState => ({}))
+    onTabChange = tab => {
+        this.setState(prevState => ({activeTab: tab}));
     }
 }
 
