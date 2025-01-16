@@ -1,5 +1,4 @@
 import React from 'react';
-//import defaultAvatar from "../../public/avatars/defaultAvatar.png"
 
 class AvatarCircle extends React.Component {
 
