@@ -5,23 +5,14 @@ function ThemeSwitcherButton() {
     const [theme, setTheme] = useState('light');
 
     useEffect(() => {
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        setTheme(savedTheme);
-        document.body.className = theme;
-        updateTheme(savedTheme);
-    }, [theme]);
-
-    // update theme stylesheet
-    const updateTheme = (newTheme) => {
-        const themeLink = document.getElementById('theme-stylesheet');
-        themeLink.href = `/styles/${newTheme}.css`;
-    }
+        const initTheme = document.documentElement.getAttribute('data-theme');
+        setTheme(initTheme);
+    }, []);
 
     const toggleTheme = () => {
         const newTheme = theme === 'light' ? 'dark' : 'light';
-        document.body.className = newTheme;
         setTheme(newTheme);
-        updateTheme(newTheme);
+        document.documentElement.setAttribute('data-theme', newTheme);
     };
 
     return (
