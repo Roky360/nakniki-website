@@ -1,13 +1,14 @@
 import Appbar from "./components/Appbar";
 import React from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
+import AdminManagement from "./screens/AdminManagement";
 
 function App() {
     return (
         <BrowserRouter>
             <Appbar/>
             <Routes>
-                <Route path="/" element={<Home/>}/>
+                <Route path="/" element={<AdminManagement/>}/>
                 <Route path="/movies" element={<Movies/>}/>
                 <Route path="/manage" element={<Manage/>}/>
                 <Route path="/search" element={<Search/>}/>
