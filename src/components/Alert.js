@@ -1,65 +1,64 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-class Alert extends React.Component {
+const Alert = ({ message, type, onClose }) => {
+    const [visible, setVisible] = useState(true);
+    const [fadeOut, setFadeOut] = useState(false); // New state for fade out
 
-    // constructor
-    constructor(props) {
-        super(props);
+    useEffect(() => {
+        // start the fade out after 3 seconds
+        const timeout = setTimeout(() => {
+            setFadeOut(true); // trigger fade out
+            setTimeout(() => {
+                setVisible(false); // after the time, set visible to false
+                onClose(); // call onClose
+            }, 1000); // Match this duration with the fade-out transition duration
+        }, 3000);
 
-        // define the state
-        this.state = {
-            visible: true,
-        };
+        // clear timeout on component unmount or re-render
+        return () => clearTimeout(timeout);
+    }, [message, onClose]);
 
-        // function timout, the alert will show up for a few seconds
-        setTimeout(() => {
-            this.setState({ visible: false });
-        }, 4000);
+    // define the alert style
+    const alertStyles = {
+        success: { backgroundColor: '#13b407', color: 'black' },
+        error: { backgroundColor: '#a20a0a', color: 'white' },
+        warning: { backgroundColor: '#c7c709', color: 'black' },
+        info: { backgroundColor: '#A9A9A9', color: 'black' },
+    };
+
+    const fadeStyle = {
+        opacity: fadeOut ? 0 : 1, // change opacity based on fadeOut state
+        transition: 'opacity 1s ease-out',
+    };
+
+    // set up the alert type style
+    const alertType = alertStyles[type] || alertStyles.info;
+
+    // apply styles with the fade transition
+    const alertStyle = {
+        ...alertType,
+        padding: '10px 20px',
+        borderRadius: '5px',
+        position: 'fixed',
+        bottom: '20px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        marginBottom: '10px',
+        zIndex: 1000,
+        ...fadeStyle,
+    };
+
+    // if visible = false
+    if (!visible) {
+        return null; // not show up the alert
     }
 
-    render() {
-        // get the message, alert type and visible
-        const { message, type } = this.props;
-        const { visible } = this.state;
-
-        // define the alert style according to type
-        const alertStyle = {
-            success: { backgroundColor: '#13b407', color: 'black' },
-            error: { backgroundColor: '#a20a0a', color: 'white' },
-            warning: { backgroundColor: '#c7c709', color: 'black' },
-            info: { backgroundColor: '#A9A9A9', color: 'black' },
-        }
-
-        // get the alert type
-        const alertType = alertStyle[type] || alertStyle.info;
-
-        // define the fade
-        const fadeStyle = {
-            opacity: visible ? 1 : 0,
-            transition: 'opacity 1s ease-out',
-        };
-
-        // return the alert
-        return (
-            <div
-                style={{
-                    ...alertType,
-                    padding: '10px 20px',
-                    borderRadius: '5px',
-                    position: 'fixed',
-                    bottom: '20px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    marginBottom: '10px',
-                    zIndex: 1000,
-                    ...fadeStyle,
-                }}
-            >
-                <span>{message}</span>
-            </div>
-        );
-
-    }
-}
+    // return the alert
+    return (
+        <div style={alertStyle}>
+            <span>{message}</span>
+        </div>
+    );
+};
 
 export default Alert;

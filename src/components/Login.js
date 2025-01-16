@@ -1,37 +1,41 @@
 import React, { useState } from 'react';
 import { sendPost } from '../services/RequestSender';
-import Alert from './Alert'
+import Alert from './Alert';
 
 const Login = () => {
 
+    // define variables
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [showAlert, setShowAlert] = useState(false); // To control the alert visibility
 
     const handleLogin = async () => {
         try {
-            setLoading(true); // Set loading state to true when the request starts
+            setLoading(true); // set loading state to true when the request starts (put Login in...)
 
-            // Prepare the request body (using URLSearchParams to format as x-www-form-urlencoded)
+            // prepare the request body
             const body = "username=" + username + "&password=" + password;
 
-            // Send POST request to the login endpoint
+            // send post request and check if user exist
             const response = await sendPost('/tokens', '', {}, body);
 
             if (response.status === 200) {
-                // Handle successful login
+                // if the user exist
                 setError('Good');
-
+                setShowAlert(true);
                 // TODO redirect to home page
             } else {
-                // Handle error response from server
+                // if the user not exist
                 const errorMessage = response.data.error || 'Invalid credentials';
                 setError(errorMessage);
+                setShowAlert(true); // Trigger the alert to show the error message
             }
         } catch (err) {
-            // Handle any errors that occur during the request
-            setError(err.response.data.error);
+            // if there was an error catch it and show the alert
+            setError(err.response?.data?.error || 'An unexpected error occurred');
+            setShowAlert(true);
         } finally {
             setLoading(false); // Stop loading
         }
@@ -43,6 +47,7 @@ const Login = () => {
             <div style={{ display: 'flex', justifyContent: 'center', textAlign: 'center', paddingTop: '30px' }}>
                 <p className="title-2 m-4">Login to your Nakniki-Account</p>
             </div>
+
             {/* display the username, password title and input */}
             <div style={{
                 display: 'flex',
@@ -52,7 +57,6 @@ const Login = () => {
                 maxWidth: '330px',
                 marginTop: '20px'
             }}>
-                {/* handle username */}
                 <div style={{ marginBottom: '40px' }}>
                     <p className="paragraph" style={{ marginBottom: '5px' }}>Username:</p>
                     <input
@@ -63,7 +67,6 @@ const Login = () => {
                         onChange={(e) => setUsername(e.target.value)}
                     />
                 </div>
-                {/* handle password */}
                 <div style={{ marginBottom: '40px' }}>
                     <p className="paragraph" style={{ marginBottom: '5px' }}>Password:</p>
                     <input
@@ -74,7 +77,8 @@ const Login = () => {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
-                {/* if the user doesn't have an account, let them move to signup page */}
+
+                {/* If the user doesn't have an account, let them move to the signup page */}
                 <div style={{
                     display: 'flex',
                     justifyContent: 'center',
@@ -100,13 +104,16 @@ const Login = () => {
                     </p>
                 </div>
             </div>
-            {/* display the Login btn */}
+
+            {/* Display the Login button */}
             <div style={{ display: 'flex', justifyContent: 'center', textAlign: 'center', paddingTop: '30px' }}>
                 <button onClick={handleLogin} className="btn-main" disabled={loading}>
                     {loading ? 'Logging in...' : 'Login'}
                 </button>
             </div>
-            {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+
+            {/* if there was an error put alert on the screen */}
+            {showAlert && error && <Alert message={error} type="error" onClose={() => {setShowAlert(false)}}/>}
         </div>
     );
 }
