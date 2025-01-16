@@ -9,7 +9,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [showAlert, setShowAlert] = useState(false); // To control the alert visibility
+    const [showAlert, setShowAlert] = useState(false);
 
     const handleLogin = async () => {
         try {
