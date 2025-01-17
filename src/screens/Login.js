@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { sendPost } from '../services/RequestSender';
-import Alert from './Alert';
+import Alert from '../components/Alert';
 import { Link } from 'react-router-dom';
 
 const Login = () => {

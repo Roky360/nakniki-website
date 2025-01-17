@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import AvatarCircle from './AvatarCircle';
+import AvatarCircle from '../components/AvatarCircle';
 import { sendPost } from '../services/RequestSender';
-import Alert from "./Alert";
+import Alert from "../components/Alert";
 import { Link } from 'react-router-dom';
 
 const Signup = () => {
