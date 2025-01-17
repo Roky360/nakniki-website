@@ -12,20 +12,23 @@ class MovieCard extends React.Component {
         // define the state
         this.state = {
             movieName: props.movie.name,
-            moviePic: props.movie.thumbnail || this.defaultPic,
+            moviePic: this.defaultPic , // TODO add - this.props.movie.thumbnail
             editFunc: props.editFunc || null,
             deleteFunc: props.deleteFunc || null,
         };
+
+        console.log(props.name);
     }
 
     // update the components in the state if they changed
     componentDidUpdate(prevProps) {
         if (prevProps.movie.name !== this.props.movie.name) {
-            this.setState({ movieName: this.props.movieName });
+            this.setState({ movieName: this.props.movie.name });
         }
 
         if (prevProps.movie.thumbnail !== this.props.movie.thumbnail) {
-            this.setState({ moviePic: this.props.moviePic });
+            const thumbnail = this.defaultPic || this.props.movie.thumbnail; // TODO change this if statement
+            this.setState({ moviePic: thumbnail });
         }
 
         if (prevProps.deleteFunc !== this.props.deleteFunc) {

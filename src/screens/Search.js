@@ -26,6 +26,7 @@ const Search = () => {
 
             if (response.status === 200) {
                 setSearchResults(response.data);
+                console.log(response.data);
             } else {
                 console.error(`Search failed with status: ${response.status}`);
                 setError('Search failed');

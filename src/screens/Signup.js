@@ -37,7 +37,12 @@ const Signup = () => {
             }
 
             // prepare the request body
-            const body = "username=" + username + "&password=" + password + "&email=" + email + "&profile_pic=" + selectedAvatar;
+            const body = {
+                username: username,
+                password: password,
+                email: email,
+                profile_pic: selectedAvatar,
+            };
 
             // send post request and check if user created
             const response = await sendPost('/users', '', {}, body);
