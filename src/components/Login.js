@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { sendPost } from '../services/RequestSender';
 import Alert from './Alert';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
 
@@ -9,7 +10,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [showAlert, setShowAlert] = useState(false); // To control the alert visibility
+    const [showAlert, setShowAlert] = useState(false);
 
     const handleLogin = async () => {
         try {
@@ -94,12 +95,12 @@ const Login = () => {
                         textAlign: 'center'
                     }}>
                         Don't have an account?
-                        <span className="link" style={{
+                        <Link to={"/signup"} className="link" style={{
                             fontSize: '14px',
                             margin: '0 4px',
                         }}>
-                            SignUp {/* TODO direct the link */}
-                        </span>
+                            SignUp
+                        </Link>
                         for infinite joy!
                     </p>
                 </div>
@@ -108,7 +109,7 @@ const Login = () => {
             {/* Display the Login button */}
             <div style={{ display: 'flex', justifyContent: 'center', textAlign: 'center', paddingTop: '30px' }}>
                 <button onClick={handleLogin} className="btn-main" disabled={loading}>
-                    {loading ? 'Logging in...' : 'Login'}
+                    {loading ? 'Logging in...' : 'Login'} {/* TODO move to home screen */}
                 </button>
             </div>
 
