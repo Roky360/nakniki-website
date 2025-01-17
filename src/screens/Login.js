@@ -17,10 +17,10 @@ const Login = () => {
             setLoading(true); // set loading state to true when the request starts (put Login in...)
 
             // prepare the request body
-            const body = "username=" + username + "&password=" + password;
+            const body = {username: username, password: password};
 
             // send post request and check if user exist
-            const response = await sendPost('/tokens', '', {}, body);
+            const response = await sendPost('/tokens', '', {}, body, {});
 
             if (response.status === 200) {
                 // if the user exist
