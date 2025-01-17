@@ -1,16 +1,18 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
-import '../style/index.css'
+import '../style/index.css';
 
-const DefaultPopup = ({ triggerElement, content, position = "right center", modal = false }) => {
+const DefaultPopup = React.forwardRef((props, ref) => {
+    const { triggerElement, content, modal = false } = props;
+
     return (
-        <Popup trigger={triggerElement} position={position} modal={modal} nested>
+        <Popup ref={ref} trigger={triggerElement} modal={modal}>
             <div className="default-popup-inner">
-                {content}
+                {content} {}
             </div>
         </Popup>
     );
-};
+});
 
 export default DefaultPopup;

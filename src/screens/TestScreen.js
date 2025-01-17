@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import DefaultPopup from '../components/DefaultPopup';
 
 function TestScreen() {
+    const popupRef = useRef(); // Reference to control the popup programmatically
     const [formData, setFormData] = useState({ username: '', password: '' });
     const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -14,12 +15,18 @@ function TestScreen() {
         e.preventDefault();
         setIsSubmitted(true);
         console.log('Form submitted:', formData);
+
+        // Close the popup programmatically after submission
+        if (popupRef.current) {
+            popupRef.current.close();
+        }
     };
 
     return (
         <div className="App">
             <h1>Popup Form Example</h1>
             <DefaultPopup
+                ref={popupRef}
                 triggerElement={<button className="btn-main">Open Form</button>}
                 content={
                     <div className="popup-container">
