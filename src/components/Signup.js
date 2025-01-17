@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import AvatarCircle from './AvatarCircle';
+import { sendPost } from '../services/RequestSender';
+import Alert from "./Alert";
 
 const Signup = () => {
 
@@ -9,11 +11,63 @@ const Signup = () => {
     const [password, setPassword] = useState('');
     const [verifyPassword, setVerifyPassword] = useState('');
     const [email, setEmail] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [showAlert, setShowAlert] = useState(false);
+
+    const handleSignup = async () => {
+        try {
+            setLoading(true); // set loading state to true when the request starts
+
+            // if the user didn't choose an avatar
+            if (selectedAvatar == null) {
+                const errorMessage = 'Please choose an avatar';
+                setError(errorMessage);
+                setShowAlert(true);
+                return;
+            }
+
+            // if the password and the verify password are not the same
+            if (password !== verifyPassword) {
+                const errorMessage = 'Password and verify password must be the same.';
+                setError(errorMessage);
+                setShowAlert(true);
+                return;
+            }
+
+            // prepare the request body
+            const body = "username=" + username + "&password=" + password + "&email=" + email + "&profile_pic=" + selectedAvatar;
+
+            // send post request and check if user created
+            const response = await sendPost('/users', '', {}, body);
+
+            if (response.status === 201) {
+                // if the user created
+                setError('Created');
+                setShowAlert(true);
+                // TODO redirect to home page
+            } else {
+                // if the user not created properly
+                const errorMessage = response.data.errors || 'Invalid credentials';
+                setError(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage); // Handle multiple errors
+                setShowAlert(true); // Trigger the alert to show the error message
+            }
+        }
+        catch (err) {
+            // if there was an error catch it and show the alert
+            const errorMessage = err.response?.data?.errors || 'An unexpected error occurred';
+            setError(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage);
+            setShowAlert(true);
+        }
+        finally {
+            setLoading(false); // Stop loading
+        }
+    }
 
     // Get all the avatars
     const avatarList = Array.from({ length: 11 }, (_, i) => `/avatars/avatar${i + 1}.png`);
 
-    // apply the chosen avatar
+    // when the user choose avatar set the state
     const handleAvatarSelect = (avatar) => {
         setSelectedAvatar(avatar);
     };
@@ -22,7 +76,7 @@ const Signup = () => {
         <div>
             {/* Display the page title */}
             <div style={{display: 'flex', justifyContent: 'center', textAlign: 'center', paddingTop: '30px'}}>
-                <p className="title-2 m-4">Create Nakniki-Account</p>
+                <p className="title-2 m-4">Create new Nakniki-Account</p>
             </div>
 
             {/* Avatar Selection Section */}
@@ -97,7 +151,7 @@ const Signup = () => {
                 </div>
                 <div style={{marginBottom: '10px'}}> {/* password */}
                     <p className="paragraph" style={{marginBottom: '3px'}}>Password:</p>
-                    <p className= "paragraph" style={{marginBottom: '5px', fontSize: '10px'}}>
+                    <p className="paragraph" style={{marginBottom: '5px', fontSize: '10px'}}>
                         Password must contain at least 6 characters and contain at least ont capital letter,
                         one number and special character.
                     </p>
@@ -152,7 +206,18 @@ const Signup = () => {
                     </p>
                 </div>
 
-                {/* Display the Login button */}
+                {/* Display the Signup button */}
+                <div style={{display: 'flex', justifyContent: 'center',width: '100%', textAlign: 'center', paddingTop: '30px'}}>
+                    <button onClick={handleSignup} className="btn-main" disabled={loading}>
+                        {loading ? 'Creating...' : 'Create Account'} {/* TODO move to home screen */}
+                    </button>
+                </div>
+
+                {/* add a spacer div */}
+                <div style={{ height: '100px' }}></div>
+
+                {/* if there was an error put alert on the screen */}
+                {showAlert && error && <Alert message={error} type="error" onClose={() => {setShowAlert(false)}}/>}
             </div>
         </div>
     );

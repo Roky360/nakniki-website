@@ -108,7 +108,7 @@ const Login = () => {
             {/* Display the Login button */}
             <div style={{ display: 'flex', justifyContent: 'center', textAlign: 'center', paddingTop: '30px' }}>
                 <button onClick={handleLogin} className="btn-main" disabled={loading}>
-                    {loading ? 'Logging in...' : 'Login'}
+                    {loading ? 'Logging in...' : 'Login'} {/* TODO move to home screen */}
                 </button>
             </div>
 
