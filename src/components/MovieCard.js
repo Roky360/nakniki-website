@@ -11,8 +11,8 @@ class MovieCard extends React.Component {
 
         // define the state
         this.state = {
-            movieName: props.movieName,
-            moviePic: props.moviePic || this.defaultPic,
+            movieName: props.movie.name,
+            moviePic: props.movie.thumbnail || this.defaultPic,
             editFunc: props.editFunc || null,
             deleteFunc: props.deleteFunc || null,
         };
@@ -20,11 +20,11 @@ class MovieCard extends React.Component {
 
     // update the components in the state if they changed
     componentDidUpdate(prevProps) {
-        if (prevProps.movieName !== this.props.movieName) {
+        if (prevProps.movie.name !== this.props.movie.name) {
             this.setState({ movieName: this.props.movieName });
         }
 
-        if (prevProps.moviePic !== this.props.moviePic) {
+        if (prevProps.movie.thumbnail !== this.props.movie.thumbnail) {
             this.setState({ moviePic: this.props.moviePic });
         }
 
