@@ -14,7 +14,8 @@
     --title-1-size: 26pt;
     --title-2-size: 22pt;
     --subtitle-size: 18pt;
-    --paragraph-size: 16pt;
+    --paragraph-size: 14pt;
+    --paragraph-2-size: 12pt;
     --nav-tab-size: 18pt;
 }
 
@@ -104,6 +105,14 @@ body {
 p {
     color: var(--text-color);
     font-size: var(--paragraph-size);
+}
+
+.cat-badge {
+    font-size: var(--paragraph-2-size);
+    background-color: var(--secondary-color) !important;
+    border-radius: 6pt;
+    margin: 8pt;
+    padding: 4pt 7pt 5pt 7pt;
 }
 
 /* Modifiers */
