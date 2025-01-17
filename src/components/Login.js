@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { sendPost } from '../services/RequestSender';
 import Alert from './Alert';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
 
@@ -94,12 +95,12 @@ const Login = () => {
                         textAlign: 'center'
                     }}>
                         Don't have an account?
-                        <span className="link" style={{
+                        <Link to={"/signup"} className="link" style={{
                             fontSize: '14px',
                             margin: '0 4px',
                         }}>
-                            SignUp {/* TODO direct the link */}
-                        </span>
+                            SignUp
+                        </Link>
                         for infinite joy!
                     </p>
                 </div>

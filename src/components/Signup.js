@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AvatarCircle from './AvatarCircle';
 import { sendPost } from '../services/RequestSender';
 import Alert from "./Alert";
+import { Link } from 'react-router-dom';
 
 const Signup = () => {
 
@@ -45,7 +46,7 @@ const Signup = () => {
                 // if the user created
                 setError('Created');
                 setShowAlert(true);
-                // TODO redirect to home page
+                // TODO redirect to login page
             } else {
                 // if the user not created properly
                 const errorMessage = response.data.errors || 'Invalid credentials';
@@ -196,12 +197,12 @@ const Signup = () => {
                         margin: '0',
                         textAlign: 'center'
                     }}>
-                    <span className="link" style={{
+                    <Link to={"/login"} className="link" style={{
                         fontSize: '14px',
                         margin: '0 4px',
                     }}>
-                        Login {/* TODO put directed link to the page */}
-                    </span>
+                        Login
+                    </Link>
                         to the key to your happiness.
                     </p>
                 </div>
