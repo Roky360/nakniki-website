@@ -5,13 +5,18 @@ const apiBase = '/api';
 const getHeaders = (jwt, headers, params, body) => {
     const isFormData = body instanceof FormData;
     return {
-        params: {
-            ...params
-        },
+        ...(params ?
+                {
+                    params: {
+                        ...params
+                    }
+                }
+                : {}
+        ),
         headers: {
-            'Authorization': `Bearer ${jwt}`,
+            'Content-Type': (isFormData ? 'multipart/form-data' : 'application/json'),
+            ...(jwt ? ({'Authorization': `Bearer ${jwt}`}) : {}),
             ...headers,
-            ...(isFormData ? {} : {'Content-Type': 'application/json'})
         }
     }
 }

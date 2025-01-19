@@ -6,15 +6,18 @@
     --btn-padding-horizontal: 12pt;
     --btn-padding-vertical: 6pt;
     /* Paddings */
+    --btn-border-radius: 10pt;
     --card-padding-horizontal: 24pt;
     --card-padding-vertical: 20pt;
     --card-border-radius: 16pt;
     --appbar-tab-margin: 10pt;
+    --form-border-radius: 7pt;
     /* Font sizes */
     --title-1-size: 26pt;
     --title-2-size: 22pt;
     --subtitle-size: 18pt;
     --paragraph-size: 14pt;
+    --small-size: 10pt;
     --paragraph-2-size: 12pt;
     --nav-tab-size: 18pt;
 }
@@ -128,13 +131,18 @@ p {
     cursor: pointer;
 }
 
+.small {
+    color: var(--text-color);
+    font-size: var(--small-size);
+}
+
 /* Main Button */
 .btn-main {
     background-color: var(--primary-color);
     color: white;
     font-weight: bold;
     font-size: var(--main-btn-size);
-    border-radius: 10pt;
+    border-radius: var(--btn-border-radius);
     border: none;
     padding: var(--btn-padding-vertical) var(--btn-padding-horizontal) var(--btn-padding-vertical) var(--btn-padding-horizontal);
     box-shadow: 0.1pt 4pt 6pt 0.1pt var(--shadow-color), 0 5pt 14pt 0 var(--shadow-color);
@@ -169,6 +177,17 @@ p {
 
 .btn-text:active {
     background-color: rgba(0, 0, 0, 0) !important;
+}
+
+/* File selector button */
+input[type="file"]::file-selector-button {
+    border-radius: var(--form-border-radius);
+    background-color: var(--form-outline);
+    color: var(--text-color);
+}
+
+input[type="file"]::file-selector-button:hover {
+    background-color: var(--form-outline-focused);
 }
 
 /* Appbar */
@@ -222,7 +241,7 @@ p {
     color: var(--text-shade-color);
     background-color: var(--form-bg);
     border: solid 1pt var(--form-outline-focused);
-    border-radius: 7pt;
+    border-radius: var(--form-border-radius);
 }
 
 /* Link */
@@ -257,6 +276,7 @@ p {
 }
 
 .title-2 {
+    color: var(--text-color);
     font-weight: bold;
     font-size: var(--title-2-size);
 }
@@ -331,4 +351,69 @@ p {
     text-overflow: ellipsis;
     max-width: 160px;
     display: block;
+}
+
+/* Multi Dropdown */
+.custom-select__control {
+    border: 1px solid #9b2a95;
+    border-radius: 0.25rem;
+    box-shadow: none;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.custom-select__control:hover {
+    border-color: #4cda2c;
+}
+
+.custom-select__control--is-focused {
+    border-color: #cb25c9;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Dropdown menu */
+.custom-select__menu {
+    z-index: 9999;
+    border-radius: 0.25rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Dropdown options */
+.custom-select__option {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.custom-select__option--is-selected {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.custom-select__option--is-focused {
+    background-color: #e9ecef;
+    color: black;
+}
+
+.custom-select__option:hover {
+    background-color: #e9ecef;
+    color: black;
+}
+
+/* Multi-value container (chips/pills) */
+.custom-select__multi-value {
+    background-color: #0ed278;
+    border-radius: 2px;
+}
+
+.custom-select__multi-value__label {
+    color: white;
+}
+
+.custom-select__multi-value__remove {
+    color: white;
+    cursor: pointer;
+}
+
+.custom-select__multi-value__remove:hover {
+    background-color: blue;
+    color: white;
 }

@@ -11,6 +11,7 @@ import Alert from "../components/Alert";
 function CreateCategory(category) {
     const catExists = (Boolean)(category && category['promoted']);
     const catNameRef = useRef(null);
+    const [loading, setLoading] = useState(false);
     const [promoted, setPromoted] = useState(catExists);
     // for showing alerts
     const [msg, setMsg] = useState(null);
@@ -18,7 +19,7 @@ function CreateCategory(category) {
     const [success, setSuccess] = useState(false);
 
     const updateCat = async (name, promoted) => {
-        sendPatch(`/categories/${category['_id']}`, '', {}, {name: name, promoted: promoted})
+        await sendPatch(`/categories/${category['_id']}`, '', {}, {name: name, promoted: promoted})
             .then((res) => {
                 if (res.status === 204) {
                     // TODO: handle closing form
@@ -39,7 +40,7 @@ function CreateCategory(category) {
     }
 
     const createCat = async (name, promoted) => {
-        sendPost('/categories', '', {}, {name: name, promoted: promoted})
+        await sendPost('/categories', '', {}, {name: name, promoted: promoted})
             .then((res) => {
                 if (res.status === 201) {
                     // TODO: handle closing the popup
@@ -61,6 +62,7 @@ function CreateCategory(category) {
 
     const onSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
 
         const name = catNameRef.current.value;
         if (catExists) {
@@ -68,6 +70,7 @@ function CreateCategory(category) {
         } else {
             await createCat(name, promoted);
         }
+        setLoading(false);
     }
 
     const formStyle = {
@@ -97,7 +100,7 @@ function CreateCategory(category) {
 
                 <span className="m-2"/>
 
-                <button type="submit" className="btn-main" style={{margin: '0 auto'}}>
+                <button type="submit" className="btn-main" style={{margin: '0 auto'}} disabled={loading}>
                     {(catExists ? "Update" : "Create")}
                 </button>
             </form>

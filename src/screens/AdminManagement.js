@@ -1,14 +1,17 @@
 import {Component} from "react";
-import {Container} from "react-bootstrap";
 
 import '../services/RequestSender'
-import {sendGet} from "../services/RequestSender";
+import {sendGet, sendPost} from "../services/RequestSender";
+import axios from "axios";
 
 class AdminManagement extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {}
+        this.state = {
+            video: null,
+
+        }
     }
 
     async componentDidMount() {
@@ -33,22 +36,50 @@ class AdminManagement extends Component {
                 throw Error("");
             })
             .catch((err) => {
-            return "";
-        });
+                return "";
+            });
+    }
+
+    onFileChange = (e) => {
+        this.setState({video: e.target.files[0]});
+    }
+
+    handleUpload = async (e) => {
+        e.preventDefault();
+        if (!this.state.video) {
+            alert('Please select a video to upload.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('video', this.state.video);
+
+        try {
+            const response = await sendPost('/uploads', '', {
+                'user_id': '677120d6efa94199a55e101a',
+                // 'Content-Type': 'multipart/form-data'
+            }, formData);
+            alert(response.data.message);
+        } catch (err) {
+            alert('Error uploading video: ' + err.message);
+        }
     }
 
     render() {
         return (
             <div>
                 <p className="title-1 center">Admin Panel</p>
-                <div className="center" >
+                <div className="center">
                     <button className="btn-main" onClick={this.loadMovies}>Create movie</button>
                     <span className="m-4"/>
                     <button className="btn-main">Create category</button>
                 </div>
 
                 <div>
-
+                    <form onSubmit={this.handleUpload}>
+                        <input type="file" accept="video/*" onChange={this.onFileChange}/>
+                        <button type="submit">Upload Video</button>
+                    </form>
                 </div>
             </div>
         );
