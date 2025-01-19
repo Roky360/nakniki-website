@@ -13,14 +13,10 @@ class CategoryRow extends React.Component {
         }
     }
 
-    componentDidUpdate(prevProps) {
-
-    }
-
     render() {
         const { categoryName, moviesList, actionsList } = this.props;
 
-        if (moviesList === null) {
+        if (moviesList.length === 0) {
             return null;
         }
 
@@ -32,8 +28,8 @@ class CategoryRow extends React.Component {
                         <MovieCard
                             key={index}
                             movie={movie}
-                            deleteFunc={actionsList[index].delete}
-                            editFunc={actionsList[index].edit}
+                            deleteFunc={actionsList?.[index]?.delete || null}
+                            editFunc={actionsList?.[index]?.edit || null}
                         />
                     ))}
                 </div>
