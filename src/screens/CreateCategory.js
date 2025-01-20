@@ -1,63 +1,69 @@
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {sendPatch, sendPost} from "../services/RequestSender";
 import Alert from "../components/Alert";
+import {useUser} from "../services/UserContext";
 
 /**
  * A form for creating/editing a category.
  * @param category Passed in edit mode, if not passed then this will be a creation form.
+ * @param onComplete
+ * @param closePopup
  * @returns {JSX.Element}
  * @constructor
  */
-function CreateCategory(category) {
-    const catExists = (Boolean)(category && category['promoted']);
-    const catNameRef = useRef(null);
+function CreateCategory({category, onComplete, closePopup}) {
+    const {user} = useUser();
+    const catExists = (Boolean)(category && category['name'] !== undefined);
     const [loading, setLoading] = useState(false);
-    const [promoted, setPromoted] = useState(catExists);
+    const catNameRef = useRef(null);
+    const [promoted, setPromoted] = useState(catExists ? category.promoted : false);
     // for showing alerts
     const [msg, setMsg] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
     const [success, setSuccess] = useState(false);
 
     const updateCat = async (name, promoted) => {
-        await sendPatch(`/categories/${category['_id']}`, '', {}, {name: name, promoted: promoted})
+        return await sendPatch(`/categories/${category['_id']}`, user.token, {}, {name: name, promoted: promoted})
             .then((res) => {
                 if (res.status === 204) {
-                    // TODO: handle closing form
                     setSuccess(true);
                     setMsg("Category updated!");
                     setShowAlert(true);
+                    return true;
                 } else {
                     setSuccess(false);
                     setMsg(res.data.error);
                     setShowAlert(true);
                 }
             }).catch((err) => {
-            setSuccess(false);
-            const errorMessage = err.response?.data?.errors || 'An unexpected error occurred';
-            setMsg(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage);
-            setShowAlert(true);
-        })
+                setSuccess(false);
+                const errorMessage = err.response?.data?.errors || 'An unexpected error occurred';
+                setMsg(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage);
+                setShowAlert(true);
+                return false;
+            });
     }
 
     const createCat = async (name, promoted) => {
-        await sendPost('/categories', '', {}, {name: name, promoted: promoted})
+        return await sendPost('/categories', user.token, {}, {name: name, promoted: promoted})
             .then((res) => {
                 if (res.status === 201) {
-                    // TODO: handle closing the popup
                     setSuccess(true);
                     setMsg("Category created!");
                     setShowAlert(true);
+                    return true;
                 } else {
                     setSuccess(false);
                     setMsg(res.data.error);
                     setShowAlert(true);
                 }
             }).catch((err) => {
-            setSuccess(false);
-            const errorMessage = err.response?.data?.errors || 'An unexpected error occurred';
-            setMsg(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage);
-            setShowAlert(true);
-        })
+                setSuccess(false);
+                const errorMessage = err.response?.data?.errors || 'An unexpected error occurred';
+                setMsg(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage);
+                setShowAlert(true);
+                return false;
+            });
     }
 
     const onSubmit = async (e) => {
@@ -65,44 +71,55 @@ function CreateCategory(category) {
         setLoading(true);
 
         const name = catNameRef.current.value;
+        let success;
         if (catExists) {
-            await updateCat(name, promoted);
+            success = await updateCat(name, promoted);
         } else {
-            await createCat(name, promoted);
+            success = await createCat(name, promoted);
         }
-        setLoading(false);
+
+        console.log(success, onComplete, closePopup)
+        if (success) {
+            if (onComplete) {
+                onComplete();
+            }
+            if (closePopup) {
+                closePopup();
+            }
+        } else {
+            setLoading(false);
+        }
     }
 
-    const formStyle = {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        margin: '0 auto',
-        maxWidth: '40%',
-        marginTop: '20px'
-    };
+    useEffect(() => {
+        if (catNameRef.current) {
+            catNameRef.current.value = catExists ? category.name : "";
+        }
+    }, []);
 
     return (
-        <div className="center">
-            <p className="title-2">{(catExists ? "Edit" : "Create") + " category"}</p>
+        <div style={{width: '20vw'}}>
+            <p className="title-2 center">{(catExists ? "Edit" : "Create") + " category"}</p>
 
-            <form onSubmit={onSubmit} style={formStyle}>
-                <p className="subtitle">Title:</p>
+            <form onSubmit={onSubmit}>
+                <p className="paragraph">Title:</p>
                 <input className="text-input" ref={catNameRef} style={{width: "100%"}}/>
 
                 <span className="m-2"/>
 
-                <div style={{display: "flex", justifyContent: "space-between", width: "100%"}}>
-                    <p className="subtitle">Title:</p>
+                <div className="mt-3" style={{display: "flex", justifyContent: "space-between", width: "100%"}}>
+                    <p className="paragraph">Promoted:</p>
                     <input type="checkbox" className="form-check-input checkbox" checked={promoted}
                            onChange={(e) => setPromoted(e.target.checked)}/>
                 </div>
 
                 <span className="m-2"/>
 
-                <button type="submit" className="btn-main" style={{margin: '0 auto'}} disabled={loading}>
-                    {(catExists ? "Update" : "Create")}
-                </button>
+                <div className="center">
+                    <button type="submit" className="btn-main" disabled={loading}>
+                        {(catExists ? "Update" : "Create")}
+                    </button>
+                </div>
             </form>
 
             {showAlert && msg &&

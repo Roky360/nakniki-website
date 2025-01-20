@@ -10,7 +10,7 @@ class Appbar extends React.Component {
 
         this.state = {
             activeTab: 0,
-            isSignedIn: true,
+            isSignedIn: false,
             isAdmin: true,
             isDarkMode: true,
         }
