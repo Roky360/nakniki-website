@@ -2,23 +2,27 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import DropdownMultiSelect from "../components/DropdownMultiSelect";
 import {sendGet} from "../services/RequestSender";
+import Alert from "../components/Alert";
 
 const CreateMovieForm = (movie) => {
     const isNew = !movie || !movie._id; // whether we create a new movie. if false then we edit a movie
     const [formData, setFormData] = useState({
-        name: "",
-        published: "",
-        actors: "",
-        length: "",
-        description: "",
-        categories: [],
+        name: isNew ? movie.name : "",
+        published: isNew ? movie.published : "",
+        actors: isNew ? movie.actors : "",
+        length: isNew ? movie.length : "",
+        description: isNew ? movie.description : "",
+        categories: isNew ? movie.categories : [],
         thumbnail: null,
     });
 
-    const [thumbnailPreview, setThumbnailPreview] = useState(null);
+    const [thumbnailPreview, setThumbnailPreview] = useState(isNew ? movie.thumbnail : null);
     const [movieFile, setMovieFile] = useState("");
-
     const [categoriesOptions, setCategoriesOptions] = useState({});
+
+    const [msg, setMsg] = useState("");
+    const [error, setError] = useState("");
+    const [showAlert, setShowAlert] = useState(false);
 
     // load categories from server
     useEffect(() => {
@@ -61,37 +65,75 @@ const CreateMovieForm = (movie) => {
         // send request to create movie
         let movieId = null;
         try {
-            const response = await axios.post('/api/movies', formData, {
+            const res = await axios.post('/api/movies', formData, {
                 headers: {"Content-Type": "multipart/form-data"},
             });
-            if (response.status === 201) {
-                // todo: success
-                console.log("success")
-                movieId = response.headers['location'].toString().split('/');
-                movieId = movieId[movieId.length - 1];
+            if (res.status !== 201) {
+                setError(res.data.error);
+                return;
             }
         } catch (e) {
-            // todo: alerts and exit on fail
+            const errorMessage = e.response?.data?.errors || 'An unexpected error occurred';
+            setError(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage);
+            return; // don't continue with uploading the movie
         }
 
         // send request to upload the movie file
-        // TODO: set filename as movie id
-        console.log("movie id: ", movieId);
         const movieForm = new FormData();
         movieForm.append('movie', movieFile);
         try {
-            const response = await axios.post('/api/uploads', movieForm, {
+            const res = await axios.post('/api/uploads', movieForm, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     "movie_id": movieId,
                 },
             });
-            if (response.status === 201) {
-                // todo: success
-                console.log("success 2")
+            if (res.status === 201) {
+                setMsg("Movie created")
+            } else {
+                setError(res.data.error);
             }
         } catch (e) {
-            // todo: alerts
+            const errorMessage = e.response?.data?.errors || 'An unexpected error occurred';
+            setError(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage);
+        }
+    }
+
+    const editMovie = async () => {
+        // send request to create movie
+        const movieId = movie._id;
+        try {
+            const res = await axios.put('/api/movies', formData, {
+                headers: {"Content-Type": "multipart/form-data"},
+            });
+            if (res.status !== 204) {
+                setError(res.data.error);
+                return;
+            }
+        } catch (e) {
+            const errorMessage = e.response?.data?.errors || 'An unexpected error occurred';
+            setError(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage);
+            return; // don't continue with uploading the movie
+        }
+
+        // send request to upload the movie file
+        const movieForm = new FormData();
+        movieForm.append('movie', movieFile);
+        try {
+            const res = await axios.put('/api/uploads', movieForm, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "movie_id": movieId,
+                },
+            });
+            if (res.status === 204) {
+                setMsg("Movie updated")
+            } else {
+                setError(res.data.error);
+            }
+        } catch (e) {
+            const errorMessage = e.response?.data?.errors || 'An unexpected error occurred';
+            setError(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage);
         }
     }
 
@@ -102,7 +144,7 @@ const CreateMovieForm = (movie) => {
         if (isNew) {
             await createMovie();
         } else {
-            // todo: put movie
+            await editMovie();
         }
     };
 
@@ -224,6 +266,13 @@ const CreateMovieForm = (movie) => {
             <div className="center">
                 <button type="submit" className="btn-main mt-4">Create</button>
             </div>
+
+            {error &&
+                <Alert type="error" message={error} onClose={() => setError("")}/>
+            }
+            {msg &&
+                <Alert type="success" message={msg} onClose={() => setMsg("")}/>
+            }
         </form>
     );
 };
