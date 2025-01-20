@@ -1,78 +1,104 @@
-import React from 'react';
-import {Navbar} from "react-bootstrap";
+import React, {useEffect, useState} from 'react';
+import { Navbar } from "react-bootstrap";
 import Icon from './Icon';
 import ThemeSwitcherButton from "./ThemeSwitcherButton";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+import {useUser} from "../services/UserContext";
+import DefaultPopup from "./DefaultPopup";
+import AvatarCircle from "./AvatarCircle";
+import UserPopupContent from "./UserPopupContent";
 
-class Appbar extends React.Component {
-    constructor(props) {
-        super(props);
+const Appbar = () => {
 
-        this.state = {
-            activeTab: 0,
-            isSignedIn: true,
-            isAdmin: true,
-            isDarkMode: true,
-        }
-        this.tabs = [
-            "Home",
-            "Movies"
-        ];
-        if (this.state.isAdmin) {
-            this.tabs.push("Manage");
-        }
+    // get the user
+    const { user } = useUser();
+
+    // define state for active tab
+    const [activeTab, setActiveTab] = useState(0);
+    const [isSignedIn, setIsSignedIn] = useState(!user);
+
+    const isAdmin = true;
+
+
+    const tabs = ["Home", "Movies"];
+    if (isAdmin) {
+        tabs.push("Manage");
     }
 
-    render() {
-        return (
-            <Navbar className="appbar">
-                {/* TODO: logo here */}
-                { // tabs
-                    this.tabs.map((tab, i) => (
-                            <Link
-                                to={`/${tab === "Home" ? "" : tab.toLowerCase()}`}
-                                key={i}
-                                onClick={() => this.onTabChange(i)}
-                                style={{textDecoration: 'none'}}
-                            >
-                                <p className={"nav-tab" + (this.state.activeTab === i ? "-active" : "")}>{tab}</p>
-                            </Link>
-                        )
-                    )
-                }
-                {/* Left side */}
-                <div className="container justify-content-end">
-                    {/* Search button */}
-                    {this.state.isSignedIn
-                        ? <Link
-                            to={'/search'}
-                            onClick={() => this.onTabChange(-1)}
-                            style={{textDecoration: 'none'}}
-                        >
-                            <Icon className="pressable" icon="search" padding="12pt"/>
-                        </Link>
-                        : null}
-                    {/* Theme switcher */}
-                    {this.state.isSignedIn ? <ThemeSwitcherButton/> : null}
-                    {/*TODO: profile pic here*/}
-                    {/*<p>PROFILE</p>*/}
-                    {!this.state.isSignedIn
-                        ? <Link
-                            to={'/login'}
-                            onClick={() => this.onTabChange(-1)}
-                            style={{textDecoration: 'none'}}
-                        >
-                            <button className="btn-text">Login</button>
-                        </Link>
-                        : null}
-                </div>
-            </Navbar>
-        );
-    }
+    // handle tab change
+    const onTabChange = (tabIndex) => {
+        setActiveTab(tabIndex);
+    };
 
-    onTabChange = tab => {
-        this.setState(prevState => ({activeTab: tab}));
-    }
-}
+    // Update isSignedIn when user changes
+    useEffect(() => {
+        setIsSignedIn(!!user);  // update based on user context
+    }, [user]);
+
+
+    return (
+        <Navbar className="appbar">
+
+            {/* app logo */}
+            <div>
+                <AvatarCircle src={'avatars/NaknikiLogo.jpg'} radius={'75px'} />
+            </div>
+
+
+            {/* Render tabs */}
+            {tabs.map((tab, i) => (
+                <Link
+                    to={`/${tab === "Home" ? "" : tab.toLowerCase()}`}
+                    key={i}
+                    style={{ textDecoration: 'none' }}
+                    onClick={() => onTabChange(i)} // Update active tab
+                >
+                    <p className={`nav-tab${activeTab === i ? "-active" : ""}`}>{tab}</p>
+                </Link>
+            ))}
+
+            {/* Left side */}
+            <div className="container justify-content-end">
+                {/* Search button */}
+                {isSignedIn && (
+                    <Link
+                        to={'/search'}
+                        style={{ textDecoration: 'none' }}
+                    >
+                        <Icon className="pressable" icon="search" padding="12pt" />
+                    </Link>
+                )}
+
+                {/* Theme switcher */}
+                {isSignedIn && (
+                    <div style={{ marginRight: '15px' }}>
+                        <ThemeSwitcherButton />
+                    </div>
+                )}
+
+                {/* profile pic */}
+                {isSignedIn && user && (
+                    <DefaultPopup
+                        position={"bottom right"}
+                        triggerElement={<div><AvatarCircle
+                            src={user.profile_pic}
+                            radius="50px" /></div>}
+                        content={<UserPopupContent />}
+                    />
+                )}
+
+                {/* Login button if the user not sign in*/}
+                {!isSignedIn && (
+                    <Link
+                        to={'/login'}
+                        style={{ textDecoration: 'none' }}
+                    >
+                        <button className="btn-text">Login</button>
+                    </Link>
+                )}
+            </div>
+        </Navbar>
+    );
+};
 
 export default Appbar;

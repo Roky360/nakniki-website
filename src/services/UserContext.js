@@ -17,6 +17,8 @@ export const UserProvider = ({ children }) => {
         localStorage.setItem('user', JSON.stringify(newUser)); // Save to localStorage
     };
 
+    const logOut = () => { setUser(null); };
+
     // fetch user data from localStorage on reload
     React.useEffect(() => {
         const storedUser = JSON.parse(localStorage.getItem('user'));
@@ -24,7 +26,7 @@ export const UserProvider = ({ children }) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ user, saveUser }}>
+        <UserContext.Provider value={{ user, saveUser, logOut }}>
             {children}
         </UserContext.Provider>
     );
