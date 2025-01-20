@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { sendPost } from '../services/RequestSender';
+import { sendPost, sendGet } from '../services/RequestSender';
 import Alert from '../components/Alert';
 import { Link } from 'react-router-dom';
+import { useUser } from '../services/UserContext';
+import {jwtDecode} from 'jwt-decode';
 
 const Login = () => {
 
@@ -11,8 +13,10 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
+    const { saveUser } = useUser();
 
     const handleLogin = async () => {
+
         try {
             setLoading(true); // set loading state to true when the request starts (put Login in...)
 
@@ -23,9 +27,14 @@ const Login = () => {
             const response = await sendPost('/tokens', '', {}, body, {});
 
             if (response.status === 200) {
+                // extract the user data
+                const token = response.data.token;
+                const userId = jwtDecode(token).user_id;
+                const userDetailsRes = await sendGet(`/users/${userId}`, token, {}, {});
                 // if the user exist
-                setError('Good');
+                setError(userDetailsRes.data.username);
                 setShowAlert(true);
+                saveUser(userDetailsRes.data, token);
                 // TODO redirect to home page
             } else {
                 // if the user not exist

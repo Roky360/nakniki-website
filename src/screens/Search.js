@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Icon from "../components/Icon";
 import { sendGet } from "../services/RequestSender";
 import MovieCard from "../components/MovieCard";
+import {useUser} from "../services/UserContext";
 
 const Search = () => {
 
@@ -10,6 +11,7 @@ const Search = () => {
     const [searchResults, setSearchResults] = useState([]);
     const [error, setError] = useState('');
     const [firstSearch, setFirstSearch] = useState(true);
+    const {user} = useUser();
 
     // when the input change update the search query
     const handleInputChange = (e) => {
@@ -21,8 +23,10 @@ const Search = () => {
         try {
             setFirstSearch(false)
 
+            console.log(user);
+
             // send the request
-            const response = await sendGet('/movies/search/' + searchQuery, '', {'user_id': '677405c39b46bc18147ac0bf'}, {query: searchQuery});
+            const response = await sendGet('/movies/search/' + searchQuery, user.token, {}, {query: searchQuery});
 
             if (response.status === 200) {
                 setSearchResults(response.data);
