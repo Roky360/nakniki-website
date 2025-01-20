@@ -1,4 +1,5 @@
 import {Component} from "react";
+import {Link} from "react-router-dom";
 
 class HomeUnregistered extends Component {
     constructor(props) {
@@ -14,12 +15,16 @@ class HomeUnregistered extends Component {
                     <img src={window.location.origin + "/avatars/NaknikiLogo.jpg"} alt="Nakniki-Netflix Logo" className="logo" />
                     <p className="title-1 center my-4">To watch billions of high quality NaknikiMovies:</p>
                     <div className="center" >
-                        <button className="btn-main">Log in</button>
+                        <Link to="/login" className="btn-main"  style={{textDecoration: 'none'}}>
+                            Log in
+                        </Link>
                     </div>
                     <span className="m-4"/>
                     <p className="subtitle center mb-0">Or if you don't have an account</p>
                     <p className="tiny-text mt-0">For the low price of your Nakniki-credit-card</p>
-                    <button className="btn-main center my-3">Sign up</button>
+                    <Link to="/Signup" className="btn-main center"  style={{textDecoration: 'none'}}>
+                        Sign up
+                    </Link>
                 </div>
             </div>
         );
