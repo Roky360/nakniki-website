@@ -150,7 +150,7 @@ const CreateMovieForm = (movie) => {
     const captionsStyle = "paragraph mb-2";
 
     return (
-        <form onSubmit={handleSubmit} className="container mt-2 mb-xxl-5" style={{}}>
+        <form onSubmit={handleSubmit} className="container mt-2 mb-xxl-5" style={{width: '32vw'}}>
             <p className="title-2 center">{(isNew ? "Create" : "Edit") + " movie"}</p>
 
             <div className="mb-3">
