@@ -3,12 +3,13 @@ import Select from 'react-select'
 const customStyles = {
     control: (provided, state) => ({
         ...provided,
-        border: state.isFocused ? "2px solid #007bff" : "1px solid #ced4da",
-        borderRadius: "0.25rem",
+        border: state.isFocused ? "1px solid var(--form-outline-focused)" : "1px solid var(--form-outline)",
+        borderRadius: "var(--form-border-radius)",
         boxShadow: state.isFocused ? "0 0 0 0.2rem rgba(0, 123, 255, 0.25)" : "none",
         "&:hover": {
             border: "1px solid #007bff",
         },
+        backgroundColor: "var(--form-bg)",
     }),
     menu: (provided) => ({
         ...provided,
@@ -17,18 +18,18 @@ const customStyles = {
     option: (provided, state) => ({
         ...provided,
         backgroundColor: state.isSelected
-            ? "#007bff"
+            ? "yellow"
             : state.isFocused
                 ? "#e9ecef"
                 : "white",
-        color: state.isSelected ? "white" : "black",
+        color: state.isSelected ? "red" : "black",
         "&:hover": {
             backgroundColor: "#e9ecef",
         },
     }),
     multiValue: (provided) => ({
         ...provided,
-        backgroundColor: "#007bff",
+        backgroundColor: "var(--secondary-color)",
         color: "white",
         borderRadius: "2px",
     }),
@@ -40,7 +41,7 @@ const customStyles = {
         ...provided,
         color: "white",
         "&:hover": {
-            backgroundColor: "#0056b3",
+            backgroundColor: "#d93f4b",
             color: "white",
         },
     }),
@@ -50,7 +51,7 @@ export default function DropdownMultiSelect(props) {
     return (
         <Select
             isMulti
-            // styles={customStyles}
+            styles={customStyles}
             classNamePrefix={"custom-select"}
             {...props}
             closeMenuOnSelect={false}
