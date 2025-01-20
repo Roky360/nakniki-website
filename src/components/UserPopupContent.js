@@ -16,9 +16,9 @@ const UserPopupContent = () => {
                     <AvatarCircle src={user.profile_pic} radius="65px"/>
                 </div>
                 <div>
-                    <p className={"title-1"}
-                       style={{margin: '0', fontSize: '26px', marginTop: '-15px'}}>{user.username}</p>
-                    <p className={"title-1"} style={{margin: '0', fontSize: '16px'}}>{user.email}</p>
+                    <p className={"paragraph"}
+                       style={{margin: '0', fontSize: '26px', marginTop: '-15px'}}><strong>{user.username}</strong></p>
+                    <p className={"paragraph"} style={{margin: '0', fontSize: '16px'}}>{user.email}</p>
                 </div>
                 <div>
                     <p

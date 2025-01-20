@@ -41,7 +41,11 @@ const Appbar = () => {
 
             {/* app logo */}
             <div>
-                <AvatarCircle src={'avatars/NaknikiLogo.jpg'} radius={'75px'} />
+                <img
+                    src={'avatars/naknikiTitle.png'}
+                    alt={'avatars/naknikiTitle.png'}
+                    style={{ height: '40px' }}
+                />
             </div>
 
 
@@ -50,7 +54,7 @@ const Appbar = () => {
                 <Link
                     to={`/${tab === "Home" ? "" : tab.toLowerCase()}`}
                     key={i}
-                    style={{ textDecoration: 'none' }}
+                    style={{textDecoration: 'none'}}
                     onClick={() => onTabChange(i)} // Update active tab
                 >
                     <p className={`nav-tab${activeTab === i ? "-active" : ""}`}>{tab}</p>
@@ -63,16 +67,16 @@ const Appbar = () => {
                 {isSignedIn && (
                     <Link
                         to={'/search'}
-                        style={{ textDecoration: 'none' }}
+                        style={{textDecoration: 'none'}}
                     >
-                        <Icon className="pressable" icon="search" padding="12pt" />
+                        <Icon className="pressable" icon="search" padding="12pt"/>
                     </Link>
                 )}
 
                 {/* Theme switcher */}
                 {isSignedIn && (
-                    <div style={{ marginRight: '15px' }}>
-                        <ThemeSwitcherButton />
+                    <div style={{marginRight: '15px'}}>
+                        <ThemeSwitcherButton/>
                     </div>
                 )}
 
@@ -82,8 +86,8 @@ const Appbar = () => {
                         position={"bottom right"}
                         triggerElement={<div><AvatarCircle
                             src={user.profile_pic}
-                            radius="50px" /></div>}
-                        content={<UserPopupContent />}
+                            radius="50px"/></div>}
+                        content={<UserPopupContent/>}
                     />
                 )}
 
@@ -91,7 +95,7 @@ const Appbar = () => {
                 {!isSignedIn && (
                     <Link
                         to={'/login'}
-                        style={{ textDecoration: 'none' }}
+                        style={{textDecoration: 'none'}}
                     >
                         <button className="btn-text">Login</button>
                     </Link>
