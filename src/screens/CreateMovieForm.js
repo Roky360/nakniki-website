@@ -22,7 +22,6 @@ const CreateMovieForm = (movie) => {
 
     const [msg, setMsg] = useState("");
     const [error, setError] = useState("");
-    const [showAlert, setShowAlert] = useState(false);
 
     // load categories from server
     useEffect(() => {
