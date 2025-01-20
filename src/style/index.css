@@ -21,6 +21,7 @@
     --paragraph-size: 14pt;
     --small-size: 10pt;
     --paragraph-2-size: 12pt;
+    --tiny-text-size: 6pt;
     --nav-tab-size: 18pt;
 
 }
@@ -81,6 +82,13 @@
 
     --link-color: #2874af;
     --link-hover-color: #2b81c4;
+}
+
+.logo {
+    width: 150pt;
+    height: 150pt;
+    border-radius: 25%;
+    object-fit: cover;
 }
 
 /* Google icons */
@@ -300,6 +308,11 @@ input[type="file"]::file-selector-button:hover {
 
 .paragraph {
     font-size: var(--paragraph-size);
+}
+
+.tiny-text {
+    font-size: var(--tiny-text-size);
+    color: var(--text-color);
 }
 
 /* Card */
