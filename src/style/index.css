@@ -8,15 +8,18 @@
     --btn-padding-horizontal: 12pt;
     --btn-padding-vertical: 6pt;
     /* Paddings */
+    --btn-border-radius: 10pt;
     --card-padding-horizontal: 24pt;
     --card-padding-vertical: 20pt;
     --card-border-radius: 16pt;
     --appbar-tab-margin: 10pt;
+    --form-border-radius: 7pt;
     /* Font sizes */
     --title-1-size: 26pt;
     --title-2-size: 22pt;
     --subtitle-size: 18pt;
     --paragraph-size: 14pt;
+    --small-size: 10pt;
     --paragraph-2-size: 12pt;
     --nav-tab-size: 18pt;
 
@@ -36,7 +39,8 @@
     --disabled-color: #623737;
     --card-shadow: rgba(48, 50, 56, 0.8);
 
-    --form-bg: rgba(100, 100, 100, 1);
+    --form-bg: #343644;
+    --form-bg-focused: #2a2c36;
     --form-outline: #2a2c36;
     --form-outline-focused: #363949;
 
@@ -62,6 +66,7 @@
     --card-shadow: rgba(48, 50, 56, 0.8);
 
     --form-bg: rgba(210, 190, 190, 1);
+    --form-bg-focused: rgb(201, 184, 184);
     --form-outline: #8e8e91;
     --form-outline-focused: #51535e;
 
@@ -212,13 +217,18 @@ p {
     cursor: pointer;
 }
 
+.small {
+    color: var(--text-color);
+    font-size: var(--small-size);
+}
+
 /* Main Button */
 .btn-main {
     background-color: var(--primary-color);
     color: white;
     font-weight: bold;
     font-size: var(--main-btn-size);
-    border-radius: 10pt;
+    border-radius: var(--btn-border-radius);
     border: none;
     padding: var(--btn-padding-vertical) var(--btn-padding-horizontal) var(--btn-padding-vertical) var(--btn-padding-horizontal);
     box-shadow: 0.1pt 4pt 6pt 0.1pt var(--shadow-color), 0 5pt 14pt 0 var(--shadow-color);
@@ -253,6 +263,17 @@ p {
 
 .btn-text:active {
     background-color: rgba(0, 0, 0, 0) !important;
+}
+
+/* File selector button */
+input[type="file"]::file-selector-button {
+    border-radius: var(--form-border-radius);
+    background-color: var(--form-outline);
+    color: var(--text-color);
+}
+
+input[type="file"]::file-selector-button:hover {
+    background-color: var(--form-outline-focused);
 }
 
 /* Appbar */
@@ -304,9 +325,9 @@ p {
 
 .text-input:focus {
     color: var(--text-shade-color);
-    background-color: var(--form-bg);
+    background-color: var(--form-bg-focused);
     border: solid 1pt var(--form-outline-focused);
-    border-radius: 7pt;
+    border-radius: var(--form-border-radius);
 }
 
 /* Link */
@@ -341,6 +362,7 @@ p {
 }
 
 .title-2 {
+    color: var(--text-color);
     font-weight: bold;
     font-size: var(--title-2-size);
 }

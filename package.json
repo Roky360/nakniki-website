@@ -12,9 +12,10 @@
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.1.2",
     "react-scripts": "5.0.1",
-    "reactjs-popup": "^2.0.6"
+    "reactjs-popup": "^2.0.6",
+    "react-select": "^5.9.0"
   },
-  "proxy": "http://localhost:3000",
+  "proxy": "http://localhost:21069",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
