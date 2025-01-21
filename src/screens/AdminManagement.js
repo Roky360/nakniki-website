@@ -7,6 +7,7 @@ import CreateMovieForm from "./CreateMovieForm";
 import CreateCategory from "./CreateCategory";
 import Alert from "../components/Alert";
 import CategoryBadge from "../components/CategoryBadge";
+import CategoryRow from "../components/CategoryRow";
 
 function AdminManagement() {
     const {user} = useUser();
@@ -14,13 +15,12 @@ function AdminManagement() {
     const createCategoryPopupRef = useRef(null);
 
     const [categories, setCategories] = useState([]);
-    const [movies, setMovies] = useState({});
+    const [movies, setMovies] = useState([]);
 
     const [error, setError] = useState(null);
-    const [msg, showMsg] = useState(null);
 
     const loadMovies = useCallback(async () => {
-        await sendGet('/movies', user.token)
+        await sendGet('/movies/all', user.token)
             .then(res => {
                 if (res.status === 200) {
                     setMovies(res.data);
@@ -113,16 +113,17 @@ function AdminManagement() {
                     <p className="center">Loading movies...</p>
                 }
                 {movies &&
-                    null
+                    movies.map(item =>
+                            <CategoryRow key={item.category} categoryName={item.category} moviesList={item.movies}
+                                         showActions onDeleteMovie={() => reloadMovies()}
+                            />
+                    )
                 }
             </div>
 
             {/* Alerts */}
             {error &&
                 <Alert type="error" message={error}/>
-            }
-            {msg &&
-                <Alert type="info" message={msg}/>
             }
         </div>
     );

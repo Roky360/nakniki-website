@@ -2,7 +2,6 @@ import React from 'react';
 import DefaultPopup from './DefaultPopup';
 import MoviePopupContent from './MoviePopupContent';
 import CreateMovieForm from "../screens/CreateMovieForm";
-import defaultPopup from "./DefaultPopup";
 import { useRef } from "react";
 import Icon from "./Icon";
 import {sendDelete} from "../services/RequestSender";

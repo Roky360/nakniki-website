@@ -10,17 +10,17 @@ const CreateMovieForm = ({movie, closePopup}) => {
     const isNew = !movie || !movie._id; // whether we create a new movie. if false then we edit a movie
     const [formData, setFormData] = useState({
         name: isNew ? "" : movie.name,
-        published: isNew ? "" : movie.published,
+        published: isNew ? "" : movie.published ? new Date(movie.published).toISOString().split("T")[0] : "",
         actors: isNew ? "" : movie.actors,
         length: isNew ? "" : movie.length,
         description: isNew ? "" : movie.description,
-        categories: isNew ? [] : movie.categories,
+        categories: isNew ? [] : movie.categories || [],
         thumbnail: null,
     });
 
-    const [thumbnailPreview, setThumbnailPreview] = useState(isNew ? null : movie.thumbnail);
+    const [thumbnailPreview, setThumbnailPreview] = useState(isNew ? null : movie.thumbnail || null);
     const [movieFile, setMovieFile] = useState("");
-    const [categoriesOptions, setCategoriesOptions] = useState({});
+    const [categoriesOptions, setCategoriesOptions] = useState([]);
 
     const [loading, setLoading] = useState(false);
     const [msg, setMsg] = useState("");
@@ -255,6 +255,7 @@ const CreateMovieForm = ({movie, closePopup}) => {
                     isMulti
                     options={categoriesOptions}
                     placeholder="Select Categories"
+                    value={categoriesOptions.filter(opt => formData.categories.includes(opt.value))}
                     onChange={handleCategoryChange}
                 />
             </div>
@@ -268,7 +269,7 @@ const CreateMovieForm = ({movie, closePopup}) => {
                     className="form-control text-input"
                     accept="image/*"
                     onChange={handleFileChange}
-                    required
+                    required={isNew}
                 />
                 {thumbnailPreview && (
                     <div className="mt-2">
@@ -291,7 +292,7 @@ const CreateMovieForm = ({movie, closePopup}) => {
             </div>
 
             <div className="center">
-                <button type="submit" className="btn-main mt-4" disabled={loading}>Create</button>
+                <button type="submit" className="btn-main mt-4" disabled={loading}>{isNew ? "Create" : "Update"}</button>
             </div>
 
             {error &&

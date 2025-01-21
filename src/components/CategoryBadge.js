@@ -4,7 +4,7 @@ import DefaultPopup from "./DefaultPopup";
 import CreateCategory from "../screens/CreateCategory";
 import {sendDelete} from "../services/RequestSender";
 import {useUser} from "../services/UserContext";
-import {useRef, useState} from "react";
+import {useRef} from "react";
 
 function CategoryBadge({name: category, showControls = false, onEdit, onDelete}) {
     const {user} = useUser();
