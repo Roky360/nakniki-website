@@ -2,7 +2,7 @@ import React, {useEffect, useState } from 'react';
 import {Navbar} from "react-bootstrap";
 import Icon from './Icon';
 import ThemeSwitcherButton from "./ThemeSwitcherButton";
-import {Link, useLocation} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useUser} from "../services/UserContext";
 import DefaultPopup from "./DefaultPopup";
 import AvatarCircle from "./AvatarCircle";
@@ -13,6 +13,7 @@ const Appbar = () => {
     // get the user
     const {user} = useUser();
     const location = useLocation();
+    const navigate = useNavigate();
 
     // define state for active tab
     const [activeTab, setActiveTab] = useState(0);
@@ -20,9 +21,11 @@ const Appbar = () => {
     const isAdmin = user && user.is_admin;
 
     const tabs = [
-        { key: "/home", value: "Home" },
-        { key: "/movies", value: "Movies" },
+        { key: "/home", value: "Home" }
     ];
+    if (user) {
+        tabs.push({ key: "/movies", value: "Movies" });
+    }
     if (isAdmin) {
         tabs.push({ key: "/manage", value: "Manage" });
     }
@@ -32,19 +35,16 @@ const Appbar = () => {
         setActiveTab(tabIndex);
     };
 
-    useEffect(() => {
-
-    }, [location]);
-
     return (
         <Navbar className="appbar">
 
             {/* app logo */}
-            <div> {/* TODO when clicked redirect to home page */}
+            <div>
                 <img
                     src={'avatars/naknikiTitle.png'}
                     alt={'avatars/naknikiTitle.png'}
-                    style={{height: '40px'}}
+                    style={{height: '40px', cursor: 'pointer'}}
+                    onClick={() => {navigate('/');}}
                 />
             </div>
 

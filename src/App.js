@@ -5,6 +5,7 @@ import AdminManagement from "./screens/AdminManagement";
 import Login from "./screens/Login";
 import {UserProvider} from "./services/UserContext";
 import Search from "./screens/Search";
+import Signup from "./screens/Signup";
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                     <Route path="/manage" element={<Manage/>}/>
                     <Route path="/search" element={<Search/>}/>
                     <Route path="/login" element={<Login/>}/>
+                    <Route path="/signup" element={<Signup/>}/>
                 </Routes>
             </BrowserRouter>
         </UserProvider>

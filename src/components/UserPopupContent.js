@@ -1,13 +1,17 @@
 import React from 'react';
 import { useUser } from '../services/UserContext';
 import AvatarCircle from "./AvatarCircle";
+import { useNavigate } from 'react-router-dom';
 
 const UserPopupContent = () => {
     const { user, saveUser } = useUser();
+    const navigate = useNavigate();
 
     const handleLogOut = () => {
         saveUser(null);
-        console.log(user + "handle");
+
+        // navigate to home page
+        navigate('/');
     };
 
     return (
