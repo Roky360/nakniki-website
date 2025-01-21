@@ -64,7 +64,7 @@ const MoviePopupContent = ({ movie }) => {
                 {/* Movie Picture */}
                 <div className="movie-card">
                     <img
-                        src={window.location.origin + "/avatars/defaultAvatar.png"} // TODO put the original pic
+                        src={window.location.origin + (movie.thumbnail || "/avatars/defaultAvatar.png")}
                         alt={movie.name}
                         className="movie-pic"
                     />

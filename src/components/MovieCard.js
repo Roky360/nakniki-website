@@ -32,7 +32,7 @@ const MovieCard = ({movie, showFunc, onDelete}) => {
                 triggerElement={
                     <div className="movie-card">
                         <img
-                            src={window.location.origin + "/avatars/defaultAvatar.png"} // TODO put the original pic
+                            src={window.location.origin + (movie.thumbnail || "/avatars/defaultAvatar.png")}
                             alt={window.location.origin + "/avatars/defaultAvatar.png"}
                             className="movie-pic"
                         />
