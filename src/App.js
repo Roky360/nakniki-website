@@ -6,6 +6,7 @@ import Login from "./screens/Login";
 import {UserProvider} from "./services/UserContext";
 import Search from "./screens/Search";
 import Signup from "./screens/Signup";
+import Home from "./screens/Home";
 
 function App() {
     return (
@@ -13,7 +14,7 @@ function App() {
             <BrowserRouter>
                 <Appbar />
                 <Routes>
-                    <Route path="/" element={<AdminManagement/>}/>
+                    <Route path="/" element={<Home/>}/>
                     <Route path="/movies" element={<Movies/>}/>
                     <Route path="/manage" element={<Manage/>}/>
                     <Route path="/search" element={<Search/>}/>
@@ -23,10 +24,6 @@ function App() {
             </BrowserRouter>
         </UserProvider>
     );
-}
-
-function Home() {
-    return (<p>Home</p>);
 }
 
 function Movies() {
