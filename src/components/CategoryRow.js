@@ -2,19 +2,19 @@ import React from 'react';
 import MovieCard from "./MovieCard";
 
 class CategoryRow extends React.Component {
-
     constructor(props) {
         super(props);
 
         this.state = {
             categoryName: this.props.categoryName,
             moviesList: this.props.moviesList || [],
-            actionsList: this.props.actionsList || [],
+            showActions: this.props.showActions ?? false,
+            onDeleteMovie: this.props.onDeleteMovie,
         }
     }
 
     render() {
-        const { categoryName, moviesList, actionsList } = this.props;
+        const { categoryName, moviesList } = this.props;
 
         if (moviesList.length === 0) {
             return null;
@@ -28,8 +28,8 @@ class CategoryRow extends React.Component {
                         <MovieCard
                             key={index}
                             movie={movie}
-                            deleteFunc={actionsList?.[index]?.delete || null}
-                            editFunc={actionsList?.[index]?.edit || null}
+                            showFunc={this.state.showActions}
+                            onDelete={this.state.onDeleteMovie}
                         />
                     ))}
                 </div>

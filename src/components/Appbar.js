@@ -1,4 +1,3 @@
-import React, {useEffect, useState } from 'react';
 import {Navbar} from "react-bootstrap";
 import Icon from './Icon';
 import ThemeSwitcherButton from "./ThemeSwitcherButton";
@@ -15,9 +14,6 @@ const Appbar = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    // define state for active tab
-    const [activeTab, setActiveTab] = useState(0);
-
     const isAdmin = user && user.is_admin;
 
     const tabs = [
@@ -29,11 +25,6 @@ const Appbar = () => {
     if (isAdmin) {
         tabs.push({ key: "/manage", value: "Manage" });
     }
-
-    // handle tab change
-    const onTabChange = (tabIndex) => {
-        setActiveTab(tabIndex);
-    };
 
     return (
         <Navbar className="appbar">
