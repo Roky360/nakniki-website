@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import { Navbar } from "react-bootstrap";
+import React, {useEffect, useState } from 'react';
+import {Navbar} from "react-bootstrap";
 import Icon from './Icon';
 import ThemeSwitcherButton from "./ThemeSwitcherButton";
-import { Link } from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import {useUser} from "../services/UserContext";
 import DefaultPopup from "./DefaultPopup";
 import AvatarCircle from "./AvatarCircle";
@@ -11,18 +11,20 @@ import UserPopupContent from "./UserPopupContent";
 const Appbar = () => {
 
     // get the user
-    const { user } = useUser();
+    const {user} = useUser();
+    const location = useLocation();
 
     // define state for active tab
     const [activeTab, setActiveTab] = useState(0);
-    const [isSignedIn, setIsSignedIn] = useState(!user);
 
-    const isAdmin = true;
+    const isAdmin = user && user.is_admin;
 
-
-    const tabs = ["Home", "Movies"];
+    const tabs = [
+        { key: "/home", value: "Home" },
+        { key: "/movies", value: "Movies" },
+    ];
     if (isAdmin) {
-        tabs.push("Manage");
+        tabs.push({ key: "/manage", value: "Manage" });
     }
 
     // handle tab change
@@ -30,41 +32,38 @@ const Appbar = () => {
         setActiveTab(tabIndex);
     };
 
-    // Update isSignedIn when user changes
     useEffect(() => {
-        setIsSignedIn(!!user);  // update based on user context
-    }, [user]);
 
+    }, [location]);
 
     return (
         <Navbar className="appbar">
 
             {/* app logo */}
-            <div>
+            <div> {/* TODO when clicked redirect to home page */}
                 <img
                     src={'avatars/naknikiTitle.png'}
                     alt={'avatars/naknikiTitle.png'}
-                    style={{ height: '40px' }}
+                    style={{height: '40px'}}
                 />
             </div>
-
 
             {/* Render tabs */}
             {tabs.map((tab, i) => (
                 <Link
-                    to={`/${tab === "Home" ? "" : tab.toLowerCase()}`}
+                    to={`${tab.key === "/home" ? "/" : tab.key}`}
                     key={i}
                     style={{textDecoration: 'none'}}
-                    onClick={() => onTabChange(i)} // Update active tab
+                    // onClick={() => onTabChange(i)} // Update active tab
                 >
-                    <p className={`nav-tab${activeTab === i ? "-active" : ""}`}>{tab}</p>
+                    <p className={`nav-tab${location === tab.key ? "-active" : ""}`}>{tab.value}</p>
                 </Link>
             ))}
 
             {/* Left side */}
             <div className="container justify-content-end">
                 {/* Search button */}
-                {isSignedIn && (
+                {user && (
                     <Link
                         to={'/search'}
                         style={{textDecoration: 'none'}}
@@ -74,14 +73,14 @@ const Appbar = () => {
                 )}
 
                 {/* Theme switcher */}
-                {isSignedIn && (
+                {user && (
                     <div style={{marginRight: '15px'}}>
                         <ThemeSwitcherButton/>
                     </div>
                 )}
 
                 {/* profile pic */}
-                {isSignedIn && user && (
+                {user && (
                     <DefaultPopup
                         position={"bottom right"}
                         triggerElement={<div><AvatarCircle
@@ -92,7 +91,7 @@ const Appbar = () => {
                 )}
 
                 {/* Login button if the user not sign in*/}
-                {!isSignedIn && (
+                {!user && (
                     <Link
                         to={'/login'}
                         style={{textDecoration: 'none'}}

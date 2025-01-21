@@ -37,7 +37,7 @@ const Search = () => {
             }
         }
         catch (err) {
-            const errorMessage = err.response?.data?.errors || 'An unexpected error occurred';
+            const errorMessage = err.response?.data?.errors|| 'An unexpected error occurred';
             setError(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage);
             console.log(error);
         }

@@ -3,10 +3,11 @@ import { useUser } from '../services/UserContext';
 import AvatarCircle from "./AvatarCircle";
 
 const UserPopupContent = () => {
-    const { user, logOut } = useUser();
+    const { user, saveUser } = useUser();
 
     const handleLogOut = () => {
-        logOut();
+        saveUser(null);
+        console.log(user + "handle");
     };
 
     return (

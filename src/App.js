@@ -4,6 +4,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import AdminManagement from "./screens/AdminManagement";
 import Login from "./screens/Login";
 import {UserProvider} from "./services/UserContext";
+import Search from "./screens/Search";
 
 function App() {
     return (
@@ -34,8 +35,5 @@ function Manage() {
     return (<p>Manage</p>);
 }
 
-function Search() {
-    return (<p>Search</p>);
-}
 
 export default App;
