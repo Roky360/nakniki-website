@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Icon from "../components/Icon";
 import { sendGet } from "../services/RequestSender";
 import MovieCard from "../components/MovieCard";
 import {useUser} from "../services/UserContext";
+import {useNavigate} from "react-router-dom";
 
 const Search = () => {
 
@@ -12,6 +13,7 @@ const Search = () => {
     const [error, setError] = useState('');
     const [firstSearch, setFirstSearch] = useState(true);
     const {user} = useUser();
+    const navigate = useNavigate();
 
     // when the input change update the search query
     const handleInputChange = (e) => {
@@ -49,6 +51,16 @@ const Search = () => {
             handleSearch();
         }
     };
+
+    useEffect(() => {
+        if (!user) {
+            navigate('/');
+        }
+    }, [user]);
+
+    if (!user) {
+        return null;
+    }
 
     return (
         <div>

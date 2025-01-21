@@ -7,11 +7,11 @@ const UserPopupContent = () => {
     const { user, saveUser } = useUser();
     const navigate = useNavigate();
 
-    const handleLogOut = () => {
-        saveUser(null);
-
+    const handleLogOut = async () => {
         // navigate to home page
-        navigate('/');
+        await navigate('/');
+
+        setTimeout(() => saveUser(null), 100);
     };
 
     return (

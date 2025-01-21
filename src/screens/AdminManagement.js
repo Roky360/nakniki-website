@@ -8,9 +8,13 @@ import CreateCategory from "./CreateCategory";
 import Alert from "../components/Alert";
 import CategoryBadge from "../components/CategoryBadge";
 import CategoryRow from "../components/CategoryRow";
+import {useNavigate} from "react-router-dom";
 
 function AdminManagement() {
     const {user} = useUser();
+    const isAdmin = user && user.is_admin;
+    const navigate = useNavigate();
+    console.log(isAdmin)
     const createMoviePopupRef = useRef(null);
     const createCategoryPopupRef = useRef(null);
 
@@ -31,7 +35,7 @@ function AdminManagement() {
             .catch((err) => {
                 setError(err.message);
             });
-    }, [user.token]);
+    }, []);
 
     const loadCategories = useCallback(async () => {
         await sendGet('/categories', user.token)
@@ -45,18 +49,27 @@ function AdminManagement() {
             .catch((err) => {
                 setError(err.message);
             });
-    }, [user.token]);
+    }, []);
 
     const reloadCategories = async () => loadCategories();
     const reloadMovies = async () => loadMovies();
 
     // load categories and movies on first load
     useEffect(() => {
-        loadCategories().then();
-        loadMovies().then();
-    }, [loadCategories, loadMovies]);
+        if (isAdmin) {
+            console.log("OH NO")
+            loadCategories().then();
+            loadMovies().then();
+        } else {
+            navigate("/"); // redirect to home page
+        }
+    }, [loadCategories, loadMovies, isAdmin]);
 
     const closeCategoryPopup = () => createCategoryPopupRef.current.close();
+
+    if (!(isAdmin)) {
+        return null;
+    }
 
     return (
         <div style={{marginLeft: "20vw", marginRight: "20vw"}}>

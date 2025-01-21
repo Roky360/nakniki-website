@@ -7,6 +7,7 @@ import {UserProvider} from "./services/UserContext";
 import Search from "./screens/Search";
 import Signup from "./screens/Signup";
 import Home from "./screens/Home";
+import MoviesScreen from "./screens/MoviesScreen";
 
 function App() {
     return (
@@ -15,8 +16,8 @@ function App() {
                 <Appbar />
                 <Routes>
                     <Route path="/" element={<Home/>}/>
-                    <Route path="/movies" element={<Movies/>}/>
-                    <Route path="/manage" element={<Manage/>}/>
+                    <Route path="/movies" element={<MoviesScreen/>}/>
+                    <Route path="/manage" element={<AdminManagement/>}/>
                     <Route path="/search" element={<Search/>}/>
                     <Route path="/login" element={<Login/>}/>
                     <Route path="/signup" element={<Signup/>}/>
@@ -25,14 +26,5 @@ function App() {
         </UserProvider>
     );
 }
-
-function Movies() {
-    return (<p>Movies</p>);
-}
-
-function Manage() {
-    return (<p>Manage</p>);
-}
-
 
 export default App;
