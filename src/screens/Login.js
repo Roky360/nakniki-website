@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { sendPost, sendGet } from '../services/RequestSender';
 import Alert from '../components/Alert';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate  } from 'react-router-dom';
 import { useUser } from '../services/UserContext';
 import {jwtDecode} from 'jwt-decode';
 
@@ -14,6 +14,7 @@ const Login = () => {
     const [error, setError] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
     const { saveUser } = useUser();
+    const navigate = useNavigate();
 
     const handleLogin = async () => {
 
@@ -31,11 +32,10 @@ const Login = () => {
                 const token = response.data.token;
                 const userId = jwtDecode(token).user_id;
                 const userDetailsRes = await sendGet(`/users/${userId}`, token, {}, {});
-                // if the user exist
-                setError(userDetailsRes.data.username);
-                setShowAlert(true);
-                saveUser(userDetailsRes.data, token);
-                // TODO redirect to home page
+                saveUser(userDetailsRes.data, token); // save the user
+
+                // navigate to home page
+                navigate('/');
             } else {
                 // if the user not exist
                 const errorMessage = response.data.error || 'Invalid credentials';
@@ -50,6 +50,13 @@ const Login = () => {
             setLoading(false); // Stop loading
         }
     }
+
+    // if the user press enter it will trigger the login
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            handleLogin();
+        }
+    };
 
     return (
         <div>
@@ -85,6 +92,7 @@ const Login = () => {
                         style={{ width: '150%' }}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        onKeyDown={handleKeyDown}
                     />
                 </div>
 
@@ -118,7 +126,7 @@ const Login = () => {
             {/* Display the Login button */}
             <div style={{ display: 'flex', justifyContent: 'center', textAlign: 'center', paddingTop: '30px' }}>
                 <button onClick={handleLogin} className="btn-main" disabled={loading}>
-                    {loading ? 'Logging in...' : 'Login'} {/* TODO move to home screen */}
+                    {loading ? 'Logging in...' : 'Login'}
                 </button>
             </div>
 

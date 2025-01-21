@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import AvatarCircle from '../components/AvatarCircle';
 import { sendPost } from '../services/RequestSender';
 import Alert from "../components/Alert";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Signup = () => {
 
@@ -15,6 +15,7 @@ const Signup = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
+    const navigate = useNavigate();
 
     const handleSignup = async () => {
         try {
@@ -51,7 +52,9 @@ const Signup = () => {
                 // if the user created
                 setError('Created');
                 setShowAlert(true);
-                // TODO redirect to login page
+
+                // navigate to log in
+                navigate('/login');
             } else {
                 // if the user not created properly
                 const errorMessage = response.data.errors || 'Invalid credentials';
@@ -76,6 +79,13 @@ const Signup = () => {
     // when the user choose avatar set the state
     const handleAvatarSelect = (avatar) => {
         setSelectedAvatar(avatar);
+    };
+
+    // if the user press enter it will trigger the signup
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            handleSignup();
+        }
     };
 
     return (
@@ -177,6 +187,7 @@ const Signup = () => {
                         style={{width: '150%'}}
                         value={verifyPassword}
                         onChange={(e) => setVerifyPassword(e.target.value)}
+                        onKeyDown={handleKeyDown}
                     />
                 </div>
 
@@ -215,7 +226,7 @@ const Signup = () => {
                 {/* Display the Signup button */}
                 <div style={{display: 'flex', justifyContent: 'center',width: '100%', textAlign: 'center', paddingTop: '30px'}}>
                     <button onClick={handleSignup} className="btn-main" disabled={loading}>
-                        {loading ? 'Creating...' : 'Create Account'} {/* TODO move to home screen */}
+                        {loading ? 'Creating...' : 'Create Account'}
                     </button>
                 </div>
 
