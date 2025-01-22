@@ -56,7 +56,6 @@ const WatchMovie = () => {
         };
 
         fetchMovie();
-
     }, [movieId, user]);
 
     const fetchCategoryNames = async (categoryIds) => {
@@ -72,6 +71,12 @@ const WatchMovie = () => {
             console.error("Error fetching category names:", error);
             setCategories([]);
         }
+    };
+
+    // Function to format date into Month Day, Year
+    const formatDate = (dateString) => {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Date(dateString).toLocaleDateString('en-US', options);
     };
 
     if (!userLoaded) {
@@ -97,38 +102,33 @@ const WatchMovie = () => {
                         <button className='btn-main' onClick={() => navigate('/')}>Back to home page</button>
                     )}
                 </div>
-            ) : movieData ? (
+            ) : (
                 <>
                     {/* Movie Player */}
-                    <MoviePlayer src={`/api/uploads/movies/${movieId}.mp4`} />
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <MoviePlayer src={`/api/uploads/movies/${movieId}.mp4`} />
 
-                    <div style={{
-                        maxWidth: '50%',
-                        margin: '20pt auto',
-                        textAlign: 'left',
-                        lineHeight: '1.6',
-                        padding: '0 20pt'
-                    }}>
-                        <p className="title-1">{movieData.name}</p>
+                        <div style={{
+                            maxWidth: '900px',
+                            width: '100%',
+                            textAlign: 'left',
+                            marginTop: '20px',
+                            padding: '0 20px'
+                        }}>
+                            <p className="title-1">{movieData.name}</p>
 
-                        <div style={{ marginBottom: '10px' }}>
-                            {categories.map((category, index) => (
+                            <div style={{ marginBottom: '10px', display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                                {categories.map((category, index) => (
                                     <CategoryBadge key={index} name={{ name: category }} />
-                                )
-                            )}
+                                ))}
+                            </div>
+
+                            <p className="paragraph mb-0">Published: {formatDate(movieData.published)}</p>
+                            <p className="paragraph mb-0 mt-0">Actors: {movieData.actors.join(', ')}</p>
+                            <p className="paragraph2 mt-0">Description: {movieData.description}</p>
                         </div>
-
-                        <p className="paragraph mb-0">Published: {movieData.published}</p>
-                        <p className="paragraph mb-0 mt-0">Actors: {movieData.actors.join(', ')}</p>
-                        <p className="paragraph2 mt-0">Description: {movieData.description}</p>
                     </div>
-
                 </>
-            ) : (
-                <div>
-                    <p className="title-1 center">Your movie does not exist!.</p>
-                    <p className="paragraph center">Try searching for a better movie!.</p>
-                </div>
             )}
         </div>
     );
