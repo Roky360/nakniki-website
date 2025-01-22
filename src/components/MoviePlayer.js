@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 
 const MoviePlayer = ({ movieId, size = "medium" }) => {
-    const videoSrc = `http://localhost:3000/api/video/${movieId}`;
+    const videoSrc = `/api/video/${movieId}`;
     const videoRef = useRef(null);
 
     // State to manage volume and play/pause
