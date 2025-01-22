@@ -2,106 +2,133 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { sendGet } from '../services/RequestSender';
 import { useUser } from "../services/UserContext";
+import CategoryBadge from "../components/CategoryBadge";
+import MoviePlayer from "../components/MoviePlayer";
 
 const WatchMovie = () => {
     const { movieId } = useParams();
     const { user } = useUser();
     const [error, setError] = useState(null);
     const navigate = useNavigate();
-    const [movie, setMovie] = useState(null);
+    const [movieData, setMovieData] = useState(null);
+    const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [userLoaded, setUserLoaded] = useState(false);  // New state to track when user is loaded
+    const [userLoaded, setUserLoaded] = useState(false);
 
     useEffect(() => {
-        console.log("Component mounted. Checking dependencies...");
-        console.log("movieId:", movieId);
-        console.log("User from context:", user);
-
-        // Wait for the user data to be available before proceeding
         if (user === null) {
-            console.warn("User data not available yet. Waiting...");
+            console.warn("Loading...");
             return;
         }
 
         setUserLoaded(true);
 
         if (!user) {
-            console.error("User is not authenticated.");
             setError("You must be logged in to watch movies.");
             setLoading(false);
             return;
         }
 
         if (!movieId) {
-            console.error("No movie ID provided.");
             setError("No movie ID provided.");
             setLoading(false);
             return;
         }
 
-        // Fetch movie details from backend
         const fetchMovie = async () => {
-            console.log(`Fetching movie with ID: ${movieId}`);
-
             try {
-                console.log("Current user from context:", user);
-                console.log("User token:", user.token);
+                const movieDataResponse = await sendGet(`/movies/${movieId}`, user.token, { 'user_id': user._id });
 
-                const response = await sendGet(`/uploads/movies/${movieId}`, user.token, { 'user_id': user._id });
+                if (movieDataResponse?.data) {
+                    setMovieData(movieDataResponse.data);
 
-                console.log("API Response:", response);
-
-                if (response && response.data) {
-                    console.log("Movie data received:", response.data);
-                    setMovie(response.data);
+                    if (movieDataResponse.data.categories?.length) {
+                        fetchCategoryNames(movieDataResponse.data.categories);
+                    }
                 } else {
-                    console.warn("No movie data received from the server.");
-                    setError('No movie data available.');
+                    setError('No movie details available.');
                 }
             } catch (err) {
-                console.error("Error fetching movie:", err);
                 setError(`Failed to fetch movie details. ${err.response?.data?.error || err.message}`);
             } finally {
-                console.log("Finished fetching movie data.");
                 setLoading(false);
             }
         };
 
         fetchMovie();
+
     }, [movieId, user]);
 
+    const fetchCategoryNames = async (categoryIds) => {
+        try {
+            const categoryNames = await Promise.all(
+                categoryIds.map(async (categoryId) => {
+                    const response = await sendGet(`/categories/${categoryId}`, user.token);
+                    return response.data.name;
+                })
+            );
+            setCategories(categoryNames);
+        } catch (error) {
+            console.error("Error fetching category names:", error);
+            setCategories([]);
+        }
+    };
+
     if (!userLoaded) {
-        return <p>Loading user data...</p>;
+        return <p className="subtitle center">Loading user data...</p>;
     }
 
     if (loading) {
-        console.log("Loading movie...");
-        return <p>Loading movie...</p>;
+        return <p className="subtitle center">Loading movie...</p>;
     }
 
     return (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
             {error ? (
-                <div>
-                    <p style={{ color: 'red' }}>{error}</p>
+                <div className="center">
+                    <div>
+                        <p className="title-1 center">Your movie does not exist!</p>
+                        <p className="paragraph center">Try searching for a better movie!</p>
+                        <p className="tiny-text center">nerd</p>
+                    </div>
                     {!user ? (
                         <button onClick={() => navigate('/login')}>Go to Login</button>
                     ) : (
-                        <button onClick={() => navigate('/')}>Back to Movies</button>
+                        <button className='btn-main' onClick={() => navigate('/')}>Back to home page</button>
                     )}
                 </div>
-            ) : movie ? (
+            ) : movieData ? (
                 <>
-                    <h1>Now Playing: {movie.name}</h1>
-                    <video controls width="80%">
-                        <source src={`http://localhost:21069/api/uploads/movies/${movieId}`} type="video/mp4" />
-                        Your browser does not support the video tag.
-                    </video>
-                    <br />
-                    <button onClick={() => navigate('/')}>Back to Movies</button>
+                    {/* Movie Player */}
+                    <MoviePlayer src={`/api/uploads/movies/${movieId}.mp4`} />
+
+                    <div style={{
+                        maxWidth: '50%',
+                        margin: '20pt auto',
+                        textAlign: 'left',
+                        lineHeight: '1.6',
+                        padding: '0 20pt'
+                    }}>
+                        <p className="title-1">{movieData.name}</p>
+
+                        <div style={{ marginBottom: '10px' }}>
+                            {categories.map((category, index) => (
+                                    <CategoryBadge key={index} name={{ name: category }} />
+                                )
+                            )}
+                        </div>
+
+                        <p className="paragraph mb-0">Published: {movieData.published}</p>
+                        <p className="paragraph mb-0 mt-0">Actors: {movieData.actors.join(', ')}</p>
+                        <p className="paragraph2 mt-0">Description: {movieData.description}</p>
+                    </div>
+
                 </>
             ) : (
-                <p>No movie found.</p>
+                <div>
+                    <p className="title-1 center">Your movie does not exist!.</p>
+                    <p className="paragraph center">Try searching for a better movie!.</p>
+                </div>
             )}
         </div>
     );
