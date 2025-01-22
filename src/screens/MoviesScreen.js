@@ -2,11 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { sendGet } from '../services/RequestSender';
 import CategoryRow from '../components/CategoryRow';
 import { useUser } from '../services/UserContext';
+import {useNavigate} from "react-router-dom";
 
 const MoviesScreen = () => {
     const { user } = useUser();
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!user) {
+            navigate('/login');
+        }
+    }, [user, navigate]);
+
 
     useEffect(() => {
         const fetchMovies = async () => {

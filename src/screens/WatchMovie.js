@@ -13,19 +13,10 @@ const WatchMovie = () => {
     const [movieData, setMovieData] = useState(null);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [userLoaded, setUserLoaded] = useState(false);
 
     useEffect(() => {
-        if (user === null) {
-            console.warn("Loading...");
-            return;
-        }
-
-        setUserLoaded(true);
-
         if (!user) {
-            setError("You must be logged in to watch movies.");
-            setLoading(false);
+            navigate('/login');
             return;
         }
 
@@ -34,6 +25,7 @@ const WatchMovie = () => {
             setLoading(false);
             return;
         }
+
 
         const fetchMovie = async () => {
             try {
@@ -56,7 +48,8 @@ const WatchMovie = () => {
         };
 
         fetchMovie();
-    }, [movieId, user]);
+    }, [movieId, user, navigate]);
+
 
     const fetchCategoryNames = async (categoryIds) => {
         try {
@@ -78,10 +71,6 @@ const WatchMovie = () => {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Date(dateString).toLocaleDateString('en-US', options);
     };
-
-    if (!userLoaded) {
-        return <p className="subtitle center">Loading user data...</p>;
-    }
 
     if (loading) {
         return <p className="subtitle center">Loading movie...</p>;
@@ -115,7 +104,7 @@ const WatchMovie = () => {
                             marginTop: '20px',
                             padding: '0 20px'
                         }}>
-                            <p className="title-1">{movieData.name}</p>
+                            <p className="title-1 mb-0">{movieData.name}</p>
 
                             <div style={{ marginBottom: '10px', display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
                                 {categories.map((category, index) => (
@@ -123,7 +112,7 @@ const WatchMovie = () => {
                                 ))}
                             </div>
 
-                            <p className="paragraph mb-0">Published: {formatDate(movieData.published)}</p>
+                            <p className="paragraph mb-0 mt-0">Published: {formatDate(movieData.published)}</p>
                             <p className="paragraph mb-0 mt-0">Actors: {movieData.actors.join(', ')}</p>
                             <p className="paragraph2 mt-0">Description: {movieData.description}</p>
                         </div>
