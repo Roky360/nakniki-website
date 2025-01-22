@@ -11,6 +11,18 @@ const MoviePopupContent = ({ movie }) => {
     const [recommendMovies, setRecommendMovies] = useState([]);
     const [categoryNames, setCategoryNames] = useState([]);
 
+    const formatDate = (dateString) => {
+        try {
+            const date = new Date(dateString);
+            return new Intl.DateTimeFormat('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+            }).format(date);
+        } catch {
+            return 'Unknown year';
+        }
+    };
 
     // Fetch recommended movies
     useEffect(() => {
@@ -52,7 +64,7 @@ const MoviePopupContent = ({ movie }) => {
                 {/* Movie Picture */}
                 <div className="movie-card">
                     <img
-                        src={window.location.origin + "/avatars/defaultAvatar.png"} // TODO put the original pic
+                        src={window.location.origin + (movie.thumbnail || "/avatars/defaultAvatar.png")}
                         alt={movie.name}
                         className="movie-pic"
                     />
@@ -71,7 +83,9 @@ const MoviePopupContent = ({ movie }) => {
                                 <CategoryBadge key={index} name={categoryName} />
                             ))}
                         </div>
-                        <p className="paragraph" style={{ marginBottom: '0px', fontSize: '13px' }}>{movie.published || 'Unknown year'}</p>
+                        <p className="paragraph" style={{marginBottom: '0px', fontSize: '13px'}}>
+                            {movie.published ? formatDate(movie.published) : 'Unknown year'}
+                        </p>
                         <p className="paragraph" style={{ marginBottom: '0px' }}>{(movie.actors || []).join(", ") || 'N/A'}</p>
                     </div>
                 </div>
@@ -80,7 +94,7 @@ const MoviePopupContent = ({ movie }) => {
             {/* Additional Details */}
             <div> {/* TODO redirect to the movie player */}
                 <p className="btn-main"
-                   style={{ width: '20%', padding: '8px 0', textAlign: 'center', marginBottom: '2px' }}>
+                   style={{ width: '30%', padding: '8px 0', textAlign: 'center', marginBottom: '2px' }}>
                     Watch Now
                 </p>
                 <p className="paragraph" style={{ marginBottom: '2px' }}>

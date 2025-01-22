@@ -10,12 +10,20 @@ export const useUser = () => useContext(UserContext);
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null); // `null` initially
 
-    // update user and token
+    // Update user and token
     const saveUser = (userData, token) => {
-        const newUser = { ...userData, token: token };
-        setUser(newUser);
-        localStorage.setItem('user', JSON.stringify(newUser)); // Save to localStorage
+        if (!userData) {
+            // Clear user data and token on logout
+            setUser(null);
+            localStorage.removeItem('user');
+        } else {
+            const newUser = { ...userData, token: token };
+            setUser(newUser);
+            localStorage.setItem('user', JSON.stringify(newUser)); // Save to localStorage
+        }
     };
+
+    const logOut = () => { setUser(null); };
 
     // fetch user data from localStorage on reload
     React.useEffect(() => {
@@ -24,7 +32,7 @@ export const UserProvider = ({ children }) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ user, saveUser }}>
+        <UserContext.Provider value={{ user, saveUser, logOut }}>
             {children}
         </UserContext.Provider>
     );

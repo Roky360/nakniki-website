@@ -2,10 +2,11 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 
 const DefaultPopup = React.forwardRef((props, ref) => {
-    const {triggerElement, content, modal = false} = props;
+    const {triggerElement, content, modal = false, position = {}} = props;
 
     return (
         <Popup
+            position={position}
             ref={ref}
             trigger={triggerElement}
             modal={modal}

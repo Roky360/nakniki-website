@@ -1,89 +1,145 @@
-import {Component} from "react";
-
+import {useState, useRef, useEffect, useCallback} from "react";
 import '../services/RequestSender'
-import {sendGet, sendPost} from "../services/RequestSender";
-import axios from "axios";
+import {sendGet} from "../services/RequestSender";
+import {useUser} from "../services/UserContext";
+import DefaultPopup from "../components/DefaultPopup";
+import CreateMovieForm from "./CreateMovieForm";
+import CreateCategory from "./CreateCategory";
+import Alert from "../components/Alert";
+import CategoryBadge from "../components/CategoryBadge";
+import CategoryRow from "../components/CategoryRow";
+import {useNavigate} from "react-router-dom";
 
-class AdminManagement extends Component {
-    constructor(props) {
-        super(props);
+function AdminManagement() {
+    const {user} = useUser();
+    const isAdmin = user && user.is_admin;
+    const navigate = useNavigate();
+    console.log(isAdmin)
+    const createMoviePopupRef = useRef(null);
+    const createCategoryPopupRef = useRef(null);
 
-        this.state = {
-            video: null,
+    const [categories, setCategories] = useState([]);
+    const [movies, setMovies] = useState([]);
 
-        }
-    }
+    const [error, setError] = useState(null);
 
-    async componentDidMount() {
-        // load movies
-
-    }
-
-    loadMovies = async () => {
-        const res = await sendGet('/movies', '', {'user_id': '677120d6efa94199a55e101a'}).catch((err) => {
-            console.log(err)
-        })
-        console.log(res
-        );
-    }
-
-    loadCategories = async () => {
-        const res = await sendGet('/categories', '', {'user_id': '677120d6efa94199a55e101a'})
+    const loadMovies = useCallback(async () => {
+        await sendGet('/movies/all', user.token)
             .then(res => {
                 if (res.status === 200) {
-                    return res.data;
+                    setMovies(res.data);
+                } else {
+                    setError(res.data.error);
                 }
-                throw Error("");
             })
             .catch((err) => {
-                return "";
+                setError(err.message);
             });
-    }
+    }, []);
 
-    onFileChange = (e) => {
-        this.setState({video: e.target.files[0]});
-    }
+    const loadCategories = useCallback(async () => {
+        await sendGet('/categories', user.token)
+            .then(res => {
+                if (res.status === 200) {
+                    setCategories(res.data);
+                } else {
+                    setError(res.data.error);
+                }
+            })
+            .catch((err) => {
+                setError(err.message);
+            });
+    }, []);
 
-    handleUpload = async (e) => {
-        e.preventDefault();
-        if (!this.state.video) {
-            alert('Please select a video to upload.');
-            return;
+    const reloadCategories = async () => loadCategories();
+    const reloadMovies = async () => loadMovies();
+
+    // load categories and movies on first load
+    useEffect(() => {
+        if (isAdmin) {
+            console.log("OH NO")
+            loadCategories().then();
+            loadMovies().then();
+        } else {
+            navigate("/"); // redirect to home page
         }
+    }, [loadCategories, loadMovies, isAdmin]);
 
-        const formData = new FormData();
-        formData.append('video', this.state.video);
+    const closeCategoryPopup = () => createCategoryPopupRef.current.close();
 
-        try {
-            const response = await sendPost('/uploads', '', {
-                'user_id': '677120d6efa94199a55e101a',
-                // 'Content-Type': 'multipart/form-data'
-            }, formData);
-            alert(response.data.message);
-        } catch (err) {
-            alert('Error uploading video: ' + err.message);
-        }
+    if (!(isAdmin)) {
+        return null;
     }
 
-    render() {
-        return (
-            <div>
-                <p className="title-1 center">Admin Panel</p>
-                <div className="center">
-                    <button className="btn-main" onClick={this.loadMovies}>Create movie</button>
-                    <span className="m-4"/>
-                    <button className="btn-main">Create category</button>
-                </div>
+    return (
+        <div style={{marginLeft: "20vw", marginRight: "20vw"}}>
+            <p className="title-1 center">Admin Panel</p>
+            <div className="center">
+                {/* Create movie button */}
+                <DefaultPopup
+                    ref={createMoviePopupRef}
+                    modal
+                    triggerElement={
+                        <button className="btn-main">Create movie</button>
+                    }
+                    content={<CreateMovieForm
+                        closePopup={() => {
+                            createMoviePopupRef.current.close();
+                            reloadMovies().then(); // reload movies
+                        }}/>}
+                />
 
-                <div>
-                    <form onSubmit={this.handleUpload}>
-                        <input type="file" accept="video/*" onChange={this.onFileChange}/>
-                        <button type="submit">Upload Video</button>
-                    </form>
-                </div>
+                <span className="m-4"/>
+                {/* Create category button */}
+                <DefaultPopup
+                    modal
+                    ref={createCategoryPopupRef}
+                    triggerElement={
+                        <button className="btn-main">Create category</button>
+                    }
+                    content={<CreateCategory onComplete={reloadCategories} closePopup={closeCategoryPopup}/>}
+                />
             </div>
-        );
-    }
+
+            <div className="m-4"/>
+
+            {/* Categories */}
+            <p className="title-2">All categories</p>
+            <div>
+                {!categories &&
+                    <p className="center">Loading categories...</p>
+                }
+                {categories &&
+                    categories.map(cat =>
+                        <CategoryBadge key={cat._id} name={cat} showControls
+                                       onEdit={reloadCategories} onDelete={reloadCategories}/>
+                    )
+                }
+            </div>
+
+            <div className="mt-4"/>
+
+            {/* Movies */}
+            <p className="title-2">All movies</p>
+            <div>
+                {!movies &&
+                    <p className="center">Loading movies...</p>
+                }
+                {movies &&
+                    movies.map(item =>
+                            <CategoryRow key={item.category} categoryName={item.category} moviesList={item.movies}
+                                         showActions onDeleteMovie={() => reloadMovies()}
+                            />
+                    )
+                }
+            </div>
+
+            {/* Alerts */}
+            {error &&
+                <Alert type="error" message={error}/>
+            }
+        </div>
+    );
 }
 
 export default AdminManagement;
