@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { sendGet } from '../services/RequestSender';
+import {sendGet, sendPost} from '../services/RequestSender';
 import { useUser } from "../services/UserContext";
 import CategoryBadge from "../components/CategoryBadge";
 import MoviePlayer from "../components/MoviePlayer";
@@ -13,6 +13,16 @@ const WatchMovie = () => {
     const [movieData, setMovieData] = useState(null);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
+
+
+    const markMovieAsWatched = async () => {
+        try {
+            await sendPost(`/movies/${movieId}/recommend`, user.token, { 'user_id': user._id });
+            console.log(`Movie ${movieId} marked as watched successfully`);
+        } catch (err) {
+            console.error(`Failed to mark movie ${movieId} as watched:`, err);
+        }
+    };
 
     useEffect(() => {
         if (!user) {
@@ -48,6 +58,8 @@ const WatchMovie = () => {
         };
 
         fetchMovie();
+        markMovieAsWatched();
+
     }, [movieId, user, navigate]);
 
 

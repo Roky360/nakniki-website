@@ -3,7 +3,7 @@ import { sendGet } from '../services/RequestSender';
 import CategoryBadge from './CategoryBadge';
 import MovieCard from "./MovieCard";
 import { useUser } from '../services/UserContext';
-import {useNavigate, useNavigation} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const MoviePopupContent = ({ movie }) => {
 
