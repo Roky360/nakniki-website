@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import {sendGet, sendPost} from '../services/RequestSender';
+import { sendGet, sendPost } from '../services/RequestSender';
 import { useUser } from "../services/UserContext";
 import CategoryBadge from "../components/CategoryBadge";
 import MoviePlayer from "../components/MoviePlayer";
@@ -13,7 +13,7 @@ const WatchMovie = () => {
     const [movieData, setMovieData] = useState(null);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
-
+    const timeoutRef = useRef(null);
 
     const markMovieAsWatched = async () => {
         try {
@@ -24,11 +24,24 @@ const WatchMovie = () => {
         }
     };
 
+    // Check if user is null, But also give enough time to check if the movie ID is wrong
     useEffect(() => {
         if (!user) {
-            navigate('/login');
-            return;
+            timeoutRef.current = setTimeout(() => {
+                navigate('/login');
+            }, 420); // Wait a nice amount of milliseconds before redirecting (Check whether the movie doesn't exist or the user)
         }
+
+        return () => {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+        };
+    }, [user, navigate]);
+
+    // Enter only if the user exists
+    useEffect(() => {
+        if (!user) return;
 
         if (!movieId) {
             setError("No movie ID provided.");
@@ -36,14 +49,13 @@ const WatchMovie = () => {
             return;
         }
 
-
+        // Gets the movie data
         const fetchMovie = async () => {
             try {
                 const movieDataResponse = await sendGet(`/movies/${movieId}`, user.token, { 'user_id': user._id });
 
                 if (movieDataResponse?.data) {
                     setMovieData(movieDataResponse.data);
-
                     if (movieDataResponse.data.categories?.length) {
                         fetchCategoryNames(movieDataResponse.data.categories);
                     }
@@ -51,7 +63,12 @@ const WatchMovie = () => {
                     setError('No movie details available.');
                 }
             } catch (err) {
-                setError(`Failed to fetch movie details. ${err.response?.data?.error || err.message}`);
+                // In case there is no such movie
+                if (err.response?.status === 404) {
+                    setError('Movie not found.');
+                } else {
+                    setError(`Failed to fetch movie details. ${err.response?.data?.error || err.message}`);
+                }
             } finally {
                 setLoading(false);
             }
@@ -59,10 +76,10 @@ const WatchMovie = () => {
 
         fetchMovie();
         markMovieAsWatched();
+    }, [movieId, user]);
 
-    }, [movieId, user, navigate]);
 
-
+    // Get all the categories of the movie to display
     const fetchCategoryNames = async (categoryIds) => {
         try {
             const categoryNames = await Promise.all(
@@ -78,16 +95,18 @@ const WatchMovie = () => {
         }
     };
 
-    // Function to format date into Month Day, Year
+    // Function to format date into mm/dd/yyyy
     const formatDate = (dateString) => {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Date(dateString).toLocaleDateString('en-US', options);
     };
 
+    // While loading
     if (loading) {
         return <p className="subtitle center">Loading movie...</p>;
     }
 
+    // Page format
     return (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
             {error ? (
@@ -97,11 +116,9 @@ const WatchMovie = () => {
                         <p className="paragraph center">Try searching for a better movie!</p>
                         <p className="tiny-text center">nerd</p>
                     </div>
-                    {!user ? (
-                        <button onClick={() => navigate('/login')}>Go to Login</button>
-                    ) : (
+                    {
                         <button className='btn-main' onClick={() => navigate('/')}>Back to home page</button>
-                    )}
+                    }
                 </div>
             ) : (
                 <>
