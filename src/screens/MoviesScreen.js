@@ -1,71 +1,49 @@
-import React, { useEffect, useState } from 'react';
-import { sendGet } from '../services/RequestSender';
-import CategoryRow from '../components/CategoryRow';
-import { useUser } from '../services/UserContext';
-import {useNavigate} from "react-router-dom";
-import MoviePlayer from '../components/MoviePlayer';
+import React, {useEffect, useState} from 'react';
+import {sendGet} from "../services/RequestSender";
+import {useUser} from "../services/UserContext";
+import MovieCard from "../components/MovieCard";
 
 const MoviesScreen = () => {
-    const { user } = useUser();
-    const [categories, setCategories] = useState([]);
-    const [error, setError] = useState(null);
-    const navigate = useNavigate();
-    const [randomMovie, setRandomMovie] = useState(null);
+    const {user} = useUser();
+    const [movies, setMovies] = useState([]);
 
-    // Sends the user to the log in screen if they're not logged
     useEffect(() => {
-        if (!user) {
-            navigate('/login');
-        }
-    }, [user, navigate]);
-
-    // Making sure that the required functions all happen asides from loading the page
-    useEffect(() => {
+        // Fetch all movies
         const fetchMovies = async () => {
             try {
-                // Get request for all movies
-                const response = await sendGet('/movies', user.token, { 'user_id': user.user_id });
-                setCategories(response.data);
-
-                // Extract all movies from the categories and choose a random one
-                const allMovies = response.data.flatMap(category => category.movies);
-
-                if (allMovies.length > 0) {
-                    const randomIndex = Math.floor(Math.random() * allMovies.length);
-                    setRandomMovie(allMovies[randomIndex]);
+                const response = await sendGet('/movies/all', user.token);
+                if (response.status === 200) {
+                    // get all the movies and put them in movies
+                    const allMovies = response.data.flatMap(category => category.movies);
+                    const allMoviesDistinct = Array.from(
+                        new Map(allMovies.map(item => [item._id, item])).values()
+                    );
+                    setMovies(allMoviesDistinct);
                 }
-            } catch (error) {
-                setError('No promoted categories and watch list found.');
+            } catch (err) {
+                console.error("Error fetching movies:", err);
             }
         };
 
-        if (user) {
-            fetchMovies();
-        }
-    }, [user]);
-
+        fetchMovies();
+    }, [user?.token]);
 
     return (
-        // The movie player that chooses a random movie, works on autoplay
-        <div className="registered-home-page">
-            {randomMovie && (
-                <div style={{ marginBottom: '40px', textAlign: 'center' }}>
-                    <MoviePlayer src={`/api/uploads/movies/${randomMovie._id}.mp4`} autoPlay={true} />
-                </div>
-            )}
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            {
-                categories.map((category, index) => (
-                    <div key={index} style={{ marginBottom: '30pt' }}>
-                        <CategoryRow
-                            key={index}
-                            categoryName={category.category}
-                            moviesList={category.movies}
-                        />
-                    </div>
-                )
-            )}
+        <div>
+            {/* Title */}
+            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                <p className="title-1" style={{marginBottom: '0px'}}>Welcome to Nakniki-Netflix</p>
+                <p className="title-2" style={{fontSize: '15px', margin: '0'}}>Infinity Movies to WATCH NOW</p>
+            </div>
+
+            {/* Show All Movies */}
+            <div style={{padding: '20px', marginTop: '50px', display: 'flex', gap: '25px', flexWrap: 'wrap'}}>
+                {movies.map((movie, index) => (
+                    <MovieCard key={index} movie={movie}/>
+                ))}
+            </div>
         </div>
+
     );
 };
 

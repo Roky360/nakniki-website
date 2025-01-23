@@ -16,6 +16,7 @@ const MovieCard = ({movie, showFunc, onDelete}) => {
         try {
             const response = await sendDelete(`/movies/${movie._id}`, user.token);
             if (response.status === 204 && onDelete) {
+                console.log(onDelete);
                 onDelete();
             }
         }

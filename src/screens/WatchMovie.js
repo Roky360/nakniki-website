@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { sendGet, sendPost } from '../services/RequestSender';
-import { useUser } from "../services/UserContext";
+import React, {useEffect, useState, useRef} from 'react';
+import {useParams, useNavigate} from 'react-router-dom';
+import {sendGet, sendPost} from '../services/RequestSender';
+import {useUser} from "../services/UserContext";
 import CategoryBadge from "../components/CategoryBadge";
 import MoviePlayer from "../components/MoviePlayer";
 
 const WatchMovie = () => {
-    const { movieId } = useParams();
-    const { user } = useUser();
+    const {movieId} = useParams();
+    const {user} = useUser();
     const [error, setError] = useState(null);
     const navigate = useNavigate();
     const [movieData, setMovieData] = useState(null);
@@ -17,7 +17,7 @@ const WatchMovie = () => {
 
     const markMovieAsWatched = async () => {
         try {
-            await sendPost(`/movies/${movieId}/recommend`, user.token, { 'user_id': user._id });
+            await sendPost(`/movies/${movieId}/recommend`, user.token, {'user_id': user._id});
             console.log(`Movie ${movieId} marked as watched successfully`);
         } catch (err) {
             console.error(`Failed to mark movie ${movieId} as watched:`, err);
@@ -52,7 +52,7 @@ const WatchMovie = () => {
         // Gets the movie data
         const fetchMovie = async () => {
             try {
-                const movieDataResponse = await sendGet(`/movies/${movieId}`, user.token, { 'user_id': user._id });
+                const movieDataResponse = await sendGet(`/movies/${movieId}`, user.token, {'user_id': user._id});
 
                 if (movieDataResponse?.data) {
                     setMovieData(movieDataResponse.data);
@@ -97,7 +97,7 @@ const WatchMovie = () => {
 
     // Function to format date into mm/dd/yyyy
     const formatDate = (dateString) => {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const options = {year: 'numeric', month: 'long', day: 'numeric'};
         return new Date(dateString).toLocaleDateString('en-US', options);
     };
 
@@ -108,7 +108,7 @@ const WatchMovie = () => {
 
     // Page format
     return (
-        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+        <div style={{textAlign: 'center', marginTop: '20px'}}>
             {error ? (
                 <div className="center">
                     <div>
@@ -123,21 +123,30 @@ const WatchMovie = () => {
             ) : (
                 <>
                     {/* Movie Player */}
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        <MoviePlayer src={`/api/uploads/movies/${movieId}.mp4`} />
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'column',
+                    }}
+                         className={"center"}
+                    >
+                        <div style={{width: '50vw'}}>
+                            <MoviePlayer src={`/api/uploads/movies/${movieId}.mp4`}/>
+                        </div>
 
                         <div style={{
-                            maxWidth: '900px',
-                            width: '100%',
+                            width: '50vw',
+                            maxWidth: '50vw',
                             textAlign: 'left',
-                            marginTop: '20px',
-                            padding: '0 20px'
+                            margin: '20px auto 0',
+                            padding: '0 20px',
                         }}>
                             <p className="title-1 mb-0">{movieData.name}</p>
 
-                            <div style={{ marginBottom: '10px', display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                            <div style={{marginBottom: '10px', display: 'flex', flexWrap: 'wrap', gap: '10px'}}>
                                 {categories.map((category, index) => (
-                                    <CategoryBadge key={index} name={{ name: category }} />
+                                    <CategoryBadge key={index} name={{name: category}}/>
                                 ))}
                             </div>
 
