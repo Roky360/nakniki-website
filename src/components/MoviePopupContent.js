@@ -3,13 +3,18 @@ import { sendGet } from '../services/RequestSender';
 import CategoryBadge from './CategoryBadge';
 import MovieCard from "./MovieCard";
 import { useUser } from '../services/UserContext';
+import {useNavigate} from "react-router-dom";
 
 const MoviePopupContent = ({ movie }) => {
 
     const { user } = useUser();
-
+    const navigate = useNavigate();
     const [recommendMovies, setRecommendMovies] = useState([]);
     const [categoryNames, setCategoryNames] = useState([]);
+
+    const navigateToMovie = () => {
+        navigate('/watch-movies/'+movie._id);
+    }
 
     const formatDate = (dateString) => {
         try {
@@ -92,9 +97,12 @@ const MoviePopupContent = ({ movie }) => {
             </div>
 
             {/* Additional Details */}
-            <div> {/* TODO redirect to the movie player */}
-                <p className="btn-main"
-                   style={{ width: '30%', padding: '8px 0', textAlign: 'center', marginBottom: '2px' }}>
+            <div>
+                <p
+                    className="btn-main"
+                    onClick={navigateToMovie}
+                    style={{ width: '30%', padding: '8px 0', textAlign: 'center', marginBottom: '2px' }}
+                >
                     Watch Now
                 </p>
                 <p className="paragraph" style={{ marginBottom: '2px' }}>
