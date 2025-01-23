@@ -111,10 +111,10 @@ const CreateMovieForm = ({movie, closePopup}) => {
     }
 
     const editMovie = async () => {
-        // send request to create movie
+        // send request to edit movie
         const movieId = movie._id;
         try {
-            const res = await axios.put('/api/movies', formData, {
+            const res = await axios.put(`/api/movies/${movieId}`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     "Authorization": `Bearer ${user.token}`
@@ -130,11 +130,11 @@ const CreateMovieForm = ({movie, closePopup}) => {
             return false; // don't continue with uploading the movie
         }
 
-        // send request to upload the movie file
+        // send request to replace the movie file
         const movieForm = new FormData();
         movieForm.append('movie', movieFile);
         try {
-            const res = await axios.put('/api/uploads', movieForm, {
+            const res = await axios.put(`/api/uploads/${movieId}`, movieForm, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     "Authorization": `Bearer ${user.token}`,

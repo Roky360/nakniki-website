@@ -12,9 +12,8 @@ import {useNavigate} from "react-router-dom";
 
 function AdminManagement() {
     const {user} = useUser();
-    const isAdmin = user && user.is_admin;
+    const isAdmin = (user && user['is_admin']) || false;
     const navigate = useNavigate();
-    console.log(isAdmin)
     const createMoviePopupRef = useRef(null);
     const createCategoryPopupRef = useRef(null);
 
@@ -24,31 +23,35 @@ function AdminManagement() {
     const [error, setError] = useState(null);
 
     const loadMovies = useCallback(async () => {
-        await sendGet('/movies/all', user.token)
-            .then(res => {
-                if (res.status === 200) {
-                    setMovies(res.data);
-                } else {
-                    setError(res.data.error);
-                }
-            })
-            .catch((err) => {
-                setError(err.message);
-            });
+        if (user && user['is_admin']) {
+            await sendGet('/movies/all', user.token)
+                .then(res => {
+                    if (res.status === 200) {
+                        setMovies(res.data);
+                    } else {
+                        setError(res.data.error);
+                    }
+                })
+                .catch((err) => {
+                    setError(err.message);
+                });
+        }
     }, []);
 
     const loadCategories = useCallback(async () => {
-        await sendGet('/categories', user.token)
-            .then(res => {
-                if (res.status === 200) {
-                    setCategories(res.data);
-                } else {
-                    setError(res.data.error);
-                }
-            })
-            .catch((err) => {
-                setError(err.message);
-            });
+        if (user && user['is_admin']) {
+            await sendGet('/categories', user.token)
+                .then(res => {
+                    if (res.status === 200) {
+                        setCategories(res.data);
+                    } else {
+                        setError(res.data.error);
+                    }
+                })
+                .catch((err) => {
+                    setError(err.message);
+                });
+        }
     }, []);
 
     const reloadCategories = async () => loadCategories();
@@ -57,7 +60,6 @@ function AdminManagement() {
     // load categories and movies on first load
     useEffect(() => {
         if (isAdmin) {
-            console.log("OH NO")
             loadCategories().then();
             loadMovies().then();
         } else {
@@ -127,9 +129,9 @@ function AdminManagement() {
                 }
                 {movies &&
                     movies.map(item =>
-                            <CategoryRow key={item.category} categoryName={item.category} moviesList={item.movies}
-                                         showActions onDeleteMovie={() => reloadMovies()}
-                            />
+                        <CategoryRow key={item.category} categoryName={item.category} moviesList={item.movies}
+                                     showActions onDeleteMovie={() => reloadMovies()}
+                        />
                     )
                 }
             </div>

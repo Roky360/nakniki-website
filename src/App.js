@@ -7,8 +7,8 @@ import {UserProvider} from "./services/UserContext";
 import Search from "./screens/Search";
 import Signup from "./screens/Signup";
 import Home from "./screens/Home";
-import MoviesScreen from "./screens/MoviesScreen";
 import WatchMovie from "./screens/WatchMovie";
+import MoviesScreen from "./screens/MoviesScreen";
 
 function App() {
     return (

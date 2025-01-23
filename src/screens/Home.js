@@ -1,15 +1,14 @@
 import React from 'react';
 import { useUser } from "../services/UserContext";
-import HomeRegister from "./HomeRegister";
 import HomeUnregistered from "./HomeUnregistered";
+import HomeRegistered from "./HomeRegistered";
 
 const Home = () => {
     const { user } = useUser();
 
     if (user) {
-        return <HomeRegister />;
+        return <HomeRegistered />;
     }
-
     return <HomeUnregistered />;
 };
 
