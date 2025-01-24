@@ -17,7 +17,7 @@ const Appbar = () => {
     const isAdmin = user && user.is_admin;
 
     const tabs = [
-        { key: "/home", value: "Home" }
+        { key: "/", value: "Home" }
     ];
     if (user) {
         tabs.push({ key: "/movies", value: "Movies" });
@@ -42,12 +42,11 @@ const Appbar = () => {
             {/* Render tabs */}
             {tabs.map((tab, i) => (
                 <Link
-                    to={`${tab.key === "/home" ? "/" : tab.key}`}
+                    to={tab.key}
                     key={i}
                     style={{textDecoration: 'none'}}
-                    // onClick={() => onTabChange(i)} // Update active tab
                 >
-                    <p className={`nav-tab${location === tab.key ? "-active" : ""}`}>{tab.value}</p>
+                    <p className={`nav-tab${location.pathname === tab.key ? "-active" : ""}`}>{tab.value}</p>
                 </Link>
             ))}
 
