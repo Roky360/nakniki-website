@@ -85,7 +85,7 @@ const MoviePopupContent = ({ movie }) => {
                         <div className="categories-container"
                              style={{ display: 'flex', flexWrap: 'wrap', gap: '2px', marginBottom: '0px' }}>
                             {categoryNames.map((categoryName, index) => (
-                                <CategoryBadge key={index} name={categoryName} />
+                                <CategoryBadge name={{name: categoryName}} key={index} />
                             ))}
                         </div>
                         <p className="paragraph" style={{marginBottom: '0px', fontSize: '13px'}}>
