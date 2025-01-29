@@ -2,7 +2,7 @@ import React from 'react';
 import DefaultPopup from './DefaultPopup';
 import MoviePopupContent from './MoviePopupContent';
 import CreateMovieForm from "../screens/CreateMovieForm";
-import { useRef } from "react";
+import {useRef} from "react";
 import Icon from "./Icon";
 import {sendDelete} from "../services/RequestSender";
 import {useUser} from "../services/UserContext";
@@ -19,8 +19,7 @@ const MovieCard = ({movie, showFunc, onDelete}) => {
                 console.log(onDelete);
                 onDelete();
             }
-        }
-        catch (error) {
+        } catch (error) {
             console.log(error);
         }
     }
@@ -46,14 +45,20 @@ const MovieCard = ({movie, showFunc, onDelete}) => {
 
             {/* show the delete and edit if showFunc is true */}
             {showFunc && (
-                <div style={{ marginTop: '5px' }}>
+                <div style={{marginTop: '5px'}}>
                     <DefaultPopup
                         ref={popupRef}
                         triggerElement={<Icon icon={'edit'} style={{fontSize: '13pt'}} padding={'3pt'}/>}
                         modal
-                        content={<CreateMovieForm movie={movie} closePopup={() => {popupRef.current.close()}} />}
+                        content={<CreateMovieForm movie={movie} closePopup={() => {
+                            popupRef.current.close();
+                            if (onDelete) { // invoke the refresh function
+                                onDelete();
+                            }
+                        }}
+                        />}
                     />
-                    <Icon icon={"delete"} style={{fontSize: '13pt'}} padding={'3pt'} onClick={handleDelete} />
+                    <Icon icon={"delete"} style={{fontSize: '13pt'}} padding={'3pt'} onClick={handleDelete}/>
                 </div>
             )}
         </div>
