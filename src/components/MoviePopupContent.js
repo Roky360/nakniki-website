@@ -82,6 +82,7 @@ const MoviePopupContent = ({ movie }) => {
 
                     {/* Movie Details */}
                     <div>
+                        <CategoryBadge name={"Test"}/>
                         <div className="categories-container"
                              style={{ display: 'flex', flexWrap: 'wrap', gap: '2px', marginBottom: '0px' }}>
                             {categoryNames.map((categoryName, index) => (
@@ -98,13 +99,13 @@ const MoviePopupContent = ({ movie }) => {
 
             {/* Additional Details */}
             <div>
-                <p
+                <button
                     className="btn-main"
                     onClick={navigateToMovie}
                     style={{ width: '30%', padding: '8px 0', textAlign: 'center', marginBottom: '2px' }}
                 >
                     Watch Now
-                </p>
+                </button>
                 <p className="paragraph" style={{ marginBottom: '2px' }}>
                     <strong>{movie.length || 'Unknown length'} minutes</strong>
                 </p>

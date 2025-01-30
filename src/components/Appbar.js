@@ -30,10 +30,10 @@ const Appbar = () => {
         <Navbar className="appbar">
 
             {/* app logo */}
-            <div>
+            <div className="me-3">
                 <img
                     src={'avatars/naknikiTitle.png'}
-                    alt={'avatars/naknikiTitle.png'}
+                    alt={'Nakniki-Netflix Logo'}
                     style={{height: '40px', cursor: 'pointer'}}
                     onClick={() => {navigate('/');}}
                 />
@@ -56,7 +56,7 @@ const Appbar = () => {
                 {user && (
                     <Link
                         to={'/search'}
-                        style={{textDecoration: 'none'}}
+                        style={{textDecoration: 'none', color: 'initial'}}
                     >
                         <Icon className="pressable" icon="search" padding="12pt"/>
                     </Link>
@@ -73,6 +73,7 @@ const Appbar = () => {
                 {user && (
                     <DefaultPopup
                         position={"bottom right"}
+                        showCloseButton={false}
                         triggerElement={<div><AvatarCircle
                             src={user.profile_pic}
                             radius="50px"/></div>}

@@ -1,4 +1,4 @@
-import {useState, useRef, useEffect, useCallback} from "react";
+import React, {useState, useRef, useEffect, useCallback} from "react";
 import '../services/RequestSender'
 import {sendGet} from "../services/RequestSender";
 import {useUser} from "../services/UserContext";
@@ -123,6 +123,7 @@ function AdminManagement() {
 
             {/* Movies */}
             <p className="title-2">All movies</p>
+            <p className="fst-italic small mb-2">Movies are displayed by category.</p>
             <div>
                 {!movies &&
                     <p className="center">Loading movies...</p>

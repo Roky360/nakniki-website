@@ -167,7 +167,7 @@ const Signup = () => {
                 </div>
                 <div style={{marginBottom: '10px'}}> {/* password */}
                     <p className="paragraph" style={{marginBottom: '3px'}}>Password:</p>
-                    <p className="paragraph" style={{marginBottom: '5px', fontSize: '10px'}}>
+                    <p className="paragraph fst-italic" style={{marginBottom: '5px', fontSize: '10px'}}>
                         Password must contain at least 6 characters and contain at least ont capital letter,
                         one number and special character.
                     </p>
