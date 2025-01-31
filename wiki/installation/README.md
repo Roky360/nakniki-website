@@ -64,12 +64,21 @@ of the **web server** (if there is no "public" directory, create one).
 
 ### Setup web-server
 
-Configure an env file to the **web server** and then run it by following steps 3, 4 in its README file.
+Configure an env file to the **web server** by following step 3 in its README file.
 
-TODO build docker for server & react and put instructions here
--
+Then, put the React website folder **inside** the server's folder, and make sure that the website's folder name 
+is set to "website" (rename it if needed). Example of that setup:
 
-Now the website is available at localhost at the port you set.
+![server-website setup](server-website-setup.png)
+
+Now, in the server's folder, run the following command, ensuring that you provide the correct path to the env file you just set up. This command assumes that you use the
+".env.example" file that we provided:
+
+```bash
+docker-compose --env-file ./config/.env.example up website-bundled -d
+```
+
+Now the website (and web server) is available at localhost at the port you set.
 
 ## 3. Android app
 
