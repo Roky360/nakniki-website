@@ -7,8 +7,7 @@ import Icon from "./Icon";
 import {sendDelete} from "../services/RequestSender";
 import {useUser} from "../services/UserContext";
 
-const MovieCard = ({movie, showFunc, onDelete}) => {
-
+const MovieCard = ({movie, showFunc, onDelete, onClick}) => {
     const popupRef = useRef(null);
     const {user} = useUser();
 
@@ -28,19 +27,22 @@ const MovieCard = ({movie, showFunc, onDelete}) => {
     return (
         <div>
             {/* if the user press on the movie a popup window will show up with movie info */}
-            <DefaultPopup
-                triggerElement={
-                    <div className="movie-card">
-                        <img
-                            src={window.location.origin + (movie.thumbnail || "/avatars/defaultAvatar.png")}
-                            alt={window.location.origin + "/avatars/defaultAvatar.png"}
-                            className="movie-pic"
-                        />
-                    </div>
-                }
-                content={<MoviePopupContent movie={movie}/>}
-                modal
-            />
+            <div>
+                <DefaultPopup
+                    triggerElement={
+                        <div className="movie-card">
+                            <img
+                                src={window.location.origin + (movie.thumbnail || "/avatars/defaultAvatar.png")}
+                                alt={window.location.origin + "/avatars/defaultAvatar.png"}
+                                className="movie-pic"
+                            />
+                        </div>
+                    }
+                    content={<MoviePopupContent movie={movie}/>}
+                    onOpen={onClick}
+                    modal
+                />
+            </div>
             <p className="title-2 movie-title">{movie.name}</p>
 
             {/* show the delete and edit if showFunc is true */}

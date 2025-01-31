@@ -86,7 +86,7 @@ const MoviePopupContent = ({ movie }) => {
                         <div className="categories-container"
                              style={{ display: 'flex', flexWrap: 'wrap', gap: '2px', marginBottom: '0px' }}>
                             {categoryNames.map((categoryName, index) => (
-                                <CategoryBadge key={index} name={categoryName} />
+                                <CategoryBadge name={{name: categoryName}} key={index} />
                             ))}
                         </div>
                         <p className="paragraph" style={{marginBottom: '0px', fontSize: '13px'}}>
@@ -120,7 +120,7 @@ const MoviePopupContent = ({ movie }) => {
                     <p className="subtitle">For you</p>
                     <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                         {recommendMovies.map((recMovie, index) => (
-                            <MovieCard key={index} movie={recMovie} />
+                            <MovieCard key={index} movie={recMovie} onClick={() => navigate('/watch-movies/'+recMovie._id)} />
                         ))}
                     </div>
                 </div>
