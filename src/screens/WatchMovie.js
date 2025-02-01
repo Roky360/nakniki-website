@@ -17,8 +17,11 @@ const WatchMovie = () => {
 
     const markMovieAsWatched = async () => {
         try {
-            await sendPost(`/movies/${movieId}/recommend`, user.token, {'user_id': user._id});
-            console.log(`Movie ${movieId} marked as watched successfully`);
+            await sendPost(`/movies/${movieId}/recommend`, user.token, {'user_id': user._id}).then(res => {
+                if (res.status === 200) {
+                    console.log(`Movie ${movieId} marked as watched successfully`);
+                }
+            });
         } catch (err) {
             console.error(`Failed to mark movie ${movieId} as watched:`, err);
         }

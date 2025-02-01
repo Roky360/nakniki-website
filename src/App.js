@@ -9,12 +9,13 @@ import Signup from "./screens/Signup";
 import Home from "./screens/Home";
 import WatchMovie from "./screens/WatchMovie";
 import MoviesScreen from "./screens/MoviesScreen";
+import NotFound from "./screens/NotFound";
 
 function App() {
     return (
         <UserProvider>
             <BrowserRouter>
-                <Appbar />
+                <Appbar/>
                 <Routes>
                     <Route path="/" element={<Home/>}/>
                     <Route path="/movies" element={<MoviesScreen/>}/>
@@ -22,7 +23,8 @@ function App() {
                     <Route path="/search" element={<Search/>}/>
                     <Route path="/login" element={<Login/>}/>
                     <Route path="/signup" element={<Signup/>}/>
-                    <Route path="/watch-movies/:movieId" element={<WatchMovie />} />
+                    <Route path="/watch-movies/:movieId" element={<WatchMovie/>}/>
+                    <Route path="*" element={<NotFound/>}/>
                 </Routes>
             </BrowserRouter>
         </UserProvider>

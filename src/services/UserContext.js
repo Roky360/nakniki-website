@@ -15,11 +15,11 @@ export const UserProvider = ({ children }) => {
         if (!userData) {
             // Clear user data and token on logout
             setUser(null);
-            localStorage.removeItem('user');
+            sessionStorage.removeItem('user');
         } else {
             const newUser = { ...userData, token: token };
             setUser(newUser);
-            localStorage.setItem('user', JSON.stringify(newUser)); // Save to localStorage
+            sessionStorage.setItem('user', JSON.stringify(newUser)); // Save to localStorage
         }
     };
 

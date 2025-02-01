@@ -262,6 +262,9 @@ const CreateMovieForm = ({movie, closePopup}) => {
 
             <div className="mb-3">
                 <p className={captionsStyle}>Thumbnail</p>
+                {!isNew &&
+                    <p className="fst-italic small mb-2" style={{color: 'red'}}>Thumbnail must be uploaded again.</p>
+                }
                 <input
                     type="file"
                     id="thumbnail"
@@ -280,6 +283,9 @@ const CreateMovieForm = ({movie, closePopup}) => {
 
             <div className="mb-3">
                 <p className={captionsStyle}>Movie file</p>
+                {!isNew &&
+                    <p className="fst-italic small mb-2" style={{color: 'red'}}>Video file must be uploaded again.</p>
+                }
                 <input
                     type="file"
                     id="movieFile"
@@ -292,7 +298,8 @@ const CreateMovieForm = ({movie, closePopup}) => {
             </div>
 
             <div className="center">
-                <button type="submit" className="btn-main mt-4" disabled={loading}>{isNew ? "Create" : "Update"}</button>
+                <button type="submit" className="btn-main mt-4"
+                        disabled={loading}>{isNew ? "Create" : "Update"}</button>
             </div>
 
             {error &&

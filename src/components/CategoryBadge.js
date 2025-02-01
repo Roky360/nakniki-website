@@ -34,7 +34,7 @@ function CategoryBadge({name: category, showControls = false, onEdit, onDelete})
                         modal
                         ref={popupRef}
                         triggerElement={
-                            <Icon icon="edit" style={iconStyle} padding={iconPadding}/>
+                            <Icon icon="edit" color="white" style={iconStyle} padding={iconPadding}/>
                         }
                         content={<CreateCategory
                             category={category}
@@ -43,7 +43,7 @@ function CategoryBadge({name: category, showControls = false, onEdit, onDelete})
                         />}
                     />
 
-                    <Icon icon="delete" style={iconStyle} padding={iconPadding} onClick={onDeleteClicked}/>
+                    <Icon icon="delete" color="white" style={iconStyle} padding={iconPadding} onClick={onDeleteClicked}/>
                 </>
             }
         </Badge>

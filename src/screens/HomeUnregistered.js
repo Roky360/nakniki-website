@@ -39,7 +39,7 @@ class HomeUnregistered extends Component {
                     </p>
                     <div className="center" style={{ marginTop: "20px" }}>
                         <Link
-                            to="/Signup"
+                            to="/signup"
                             className="btn-main center"
                             style={{ textDecoration: "none" }}
                         >

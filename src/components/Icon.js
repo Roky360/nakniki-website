@@ -1,4 +1,4 @@
-function Icon({className = "", icon, color = "white", padding = "5pt", border = false, style = {}, onClick = null}) {
+function Icon({className = "", icon, color = "var(--text-color)", padding = "5pt", border = false, style = {}, onClick = null}) {
     return (
         <span className={`material-icons ${className}`}
               style={{
