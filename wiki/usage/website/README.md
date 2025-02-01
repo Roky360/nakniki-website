@@ -2,7 +2,7 @@
 
 Welcome to **Nakniki-Netflix**, a movie-streaming platform designed to provide a seamless user experience for browsing, managing, and watching movies.
 
-This README will guide you through the setup, usage, and core functionalities of **Nakniki-Netflix**.
+This README will guide you through the setup, usage, and core functionalities of **Nakniki-Netflix Website**.
 
 ## Home Screen for unregster User
 
@@ -51,6 +51,10 @@ After the user did the Login, he will enter the Home page for registers users.
 In the top of the page there is an automatically player that plays a random movie and when the user scroll down there are movies that their categories are "promoted".  
 In this page there is only "promoted" movies.
 
+At the **top of the page**, there is a navigation bar (navbar) that includes:
+- **Theme Switch Icon** – Allows the user to switch between **light mode** and **dark mode**.
+- **Search Icon** – Takes the user to the **search screen**, where they can look for movies based on name, actors, category, and more.
+- **Movies Button** – Navigates the user to the **Movies page**, where they can explore all available movies.
 ## Movies page
 
 In this page you can see all the movies that exist in the website.
@@ -69,7 +73,7 @@ When the user click on the movie thumbnail, a popup window will appear that cont
 
 ![Movie Info](MovieInfo.png)
 
-## Movie Watch
+## Watch Movie
 
 After the user click on the WATCH NOW button a new window will appear with the movie player and the movie details.  
 In this page the user can watch the movie and RELAX.
@@ -94,7 +98,7 @@ The user can search movies by -
 ## Admin panel
 
 If the user that logged in define as "admin" so a new tab will appear in the navbar that called "MANAGE".  
-In the **MANAGE** page the admin can create movies, categories edit them and also delete them.  
+In the **MANAGE** page the admin can create movies, categories edit them and also delete them.
 
 ![Manage Screen](ManageScreen.png)
 ![Manage Screen](ManageScreen2.png)
@@ -104,7 +108,7 @@ In the **MANAGE** page the admin can create movies, categories edit them and als
 When the admin click the "Create category" a new popup screen will appear.  
 There the admin will enter the category name and mark down if the category is promoted or not.
 
-![Create Category](CreatreCategory.png)
+![Create Category](CreateCategory.png)
 
 ### Edit Category
 
@@ -139,4 +143,20 @@ This popup window looks like the popup in the create movie.
 
 ### Delete Movie
 
-When the admin click the trash icon near the movie it will delete the chosen movie.  
+When the admin click the trash icon near the movie it will delete the chosen movie.
+
+## How to assign an Admin User
+
+To grant a user admin privileges, follow these steps:  
+1. Open MongoDB Compass.
+2. Navigate to the Users Collection.
+3. Search for the user document you want to make an admin.
+4. Update the user's document by adding following field:  
+```bash
+{
+  "is_admin": true 
+}
+```
+5. Click "Update" or "Save" to apply the changes.
+
+Now this user define as Admin.
