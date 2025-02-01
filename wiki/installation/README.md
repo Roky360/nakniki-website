@@ -10,6 +10,8 @@ The system consists of 4 GitHub repositories:
 - React website ([nakniki-website](https://github.com/Roky360/nakniki-website))
 - Android application ([nakniki-app](https://github.com/Roky360/nakniki-app))
 
+**Also**, some of the repositories contain branches reserved for parts 1-4, so you can check each part individually.
+
 You may also visit our [Jira](https://edenshkd.atlassian.net/jira/software/projects/NP/boards/2/backlog) to find out about our journey of making this project :P
 
 Below are the system requirements to run the project, and how to set up and run each part.
