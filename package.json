@@ -15,7 +15,6 @@
     "reactjs-popup": "^2.0.6",
     "react-select": "^5.9.0"
   },
-  "proxy": "http://localhost:21069",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

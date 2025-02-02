@@ -1,6 +1,8 @@
 # nakniki-website
 
-The react website of the Netflix project.
+_Avi Ben David, Kfir Eitan, Eden Shaked_
+
+This is the React website of the Netflix project.
 
 > **Important:** The wiki for the project is in the "wiki" folder in this repository.
 
