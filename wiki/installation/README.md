@@ -78,14 +78,11 @@ When finished, the website (and web server) is available at localhost at the por
 
 ## 3. Android app
 
-Clone the [nakniki-app](https://github.com/Roky360/nakniki-app) repo with:
-```bash
-git clone https://github.com/Roky360/nakniki-app.git
-```
+Download and extract the ZIP of the [nakniki-app](https://github.com/Roky360/nakniki-app) repository (it's important to download the ZIP **and not clone**).
 
 ### Set up web server URL
 
-Set up the web server URL by going to the `strings.xml` file located in `/app/src/main/res/values` folder.
+Set up the web server URL by going to the `strings.xml` file located in the `/app/src/main/res/values` folder.
 In there, set the "api_base_url" string (should be the second item) to the web server URL, with the addition of `/api/` at the end. 
 Also notice that if you intend on running the app on an emulator, write `10.0.2.2` instead of "localhost".
 
